@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<script>
+if (window.CSS && window.CSS.paintWorklet) {
+  CSS.paintWorklet.addModule('curly-bracket.js');
+}
+</script>
+<style>
+ul {
+  background-image: paint(curly-bracket);
+}
+</style>
+<body>
+  <ul>
+    <li>hello</li>
+    <li>hello</li>
+    <li>hello</li>
+    <li>hello</li>
+    <li>hello</li>
+    <li>hello</li>
+    <li>hello</li>
+    <li>hello</li>
+    <li>hello</li>
+  </ul>
+</body>
