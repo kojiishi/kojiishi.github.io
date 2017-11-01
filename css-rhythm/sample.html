@@ -2,6 +2,7 @@
 <style>
 article {
   font-size: 16px;
+  margin: 2em;
 }
 
 @supports (line-height-step: 1px) {
@@ -26,6 +27,8 @@ article {
     line-height-step: 0;
     line-height: 1.2;
     margin: var(--grid) 0 0 0;
+    /*margin-top: calc(var(--grid) * 2 / 3);*/
+    /*margin-bottom: calc(var(--grid) / 3);*/
   }
   .rhythm {
     line-height-step: inherit;
@@ -43,13 +46,21 @@ article {
     height: 200px;
     background-color: gray;
   }
+  .ui {
+    position: fixed;
+    top: 0;
+    right: 0;
+    -webkit-user-select: none;
+    padding: 1em;
+    background: lightgray;
+  }
   .grid {
     background-size: 100% var(--grid);
     background-image: linear-gradient(to bottom, #00bcd4 1px, transparent 1px);
   }
 }
 </style>
-<article class=grid>
+<article class="grid">
 <h2>見出し</h2>
 <p>
   これは行取りのサンプルです。これは行取りのサンプルです。これは行取りのサンプルです。これは行取りのサンプルです。これは行取りのサンプルです。これは行取りのサンプルです。これは行取りのサンプルです。
@@ -67,6 +78,16 @@ article {
 </p>
 <div class="image"><img></div>
 <p>
-  画像と本文の間の空白を一定にする場合、画像の後は、その前とはリズムを揃えず、新しいリズムを始めます。
+  画像と本文の間の空白を一定にする場合、画像の後は、その前とはリズムを揃えず、新しいリズムを始めます。画像と本文の間の空白を一定にする場合、画像の後は、その前とはリズムを揃えず、新しいリズムを始めます。画像と本文の間の空白を一定にする場合、画像の後は、その前とはリズムを揃えず、新しいリズムを始めます。
 </p>
 </article>
+<script>
+function update() {
+  let article = document.getElementsByTagName('article')[0];
+  article.classList.toggle('grid');
+}
+</script>
+<div class="ui">
+  <input id="show-guide" type="checkbox" checked onchange="update()">
+  <label for="show-guide">ガイドラインの表示</label>
+</div>
