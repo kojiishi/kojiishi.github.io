@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<style>
+article {
+  font-size: 16px;
+}
+
+@supports (line-height-step: 1px) {
+  article {
+    --grid: 24px;
+    line-height-step: var(--grid);
+  }
+  article > p {
+    line-height: 1.2;
+    margin: 0;
+  }
+  article > p + p {
+    margin: var(--grid) 0 0 0;
+  }
+  article > div, article > table {
+    line-height-step: 0;
+    margin: 0;
+  }
+  article > h2, article > h3 {
+    display: inline-block;
+    width: 100%;
+    line-height-step: 0;
+    line-height: 1.2;
+    margin: var(--grid) 0 0 0;
+  }
+  .rhythm {
+    line-height-step: inherit;
+    display: inline-block;
+    width: 100%;
+    line-height: 0;
+    margin: 0;
+  }
+  .image {
+    text-align: center;
+    line-height: 0;
+  }
+  .image > img {
+    width: 70%;
+    height: 200px;
+    background-color: gray;
+  }
+  .grid {
+    background-size: 100% var(--grid);
+    background-image: linear-gradient(to bottom, #00bcd4 1px, transparent 1px);
+  }
+}
+</style>
+<article class=grid>
+<h2>見出し</h2>
+<p>
+  これは行取りのサンプルです。これは行取りのサンプルです。これは行取りのサンプルです。これは行取りのサンプルです。これは行取りのサンプルです。これは行取りのサンプルです。これは行取りのサンプルです。
+</p>
+<p>
+  これは行取りのサンプルです。これは行取りのサンプルです。これは行取りのサンプルです。これは行取りのサンプルです。これは行取りのサンプルです。これは行取りのサンプルです。これは行取りのサンプルです。
+</p>
+<h2>見出し</h2>
+<p>
+  これは行取りのサンプルです。これは行取りのサンプルです。これは行取りのサンプルです。これは行取りのサンプルです。これは行取りのサンプルです。これは行取りのサンプルです。これは行取りのサンプルです。
+</p>
+<div class="image rhythm"><img></div>
+<p>
+  画像の後も揃えると、画像と本文の間の空白が一定でなくなります。
+</p>
+<div class="image"><img></div>
+<p>
+  画像と本文の間の空白を一定にする場合、画像の後は、その前とはリズムを揃えず、新しいリズムを始めます。
+</p>
+</article>
