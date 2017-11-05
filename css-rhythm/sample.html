@@ -7,6 +7,13 @@ article {
 large {
   font-size: 200%;
 }
+.experiment {
+  padding: 2em;
+  background-color: rgb(236, 235, 144);
+}
+.ui {
+  display: none;
+}
 
 @supports (line-height-step: 1px) {
   article {
@@ -51,14 +58,6 @@ large {
     height: 200px;
     background-color: gray;
   }
-  .ui {
-    position: fixed;
-    top: 0;
-    right: 0;
-    -webkit-user-select: none;
-    padding: 1em;
-    background: lightgray;
-  }
   .guide {
     background-size: 100% var(--grid);
     background-image: linear-gradient(to bottom, var(--guide-color) 1px, transparent 1px);
@@ -66,8 +65,29 @@ large {
   .guide2 {
     --guide-color: #ff0000;
   }
+  .experiment {
+    display: none;
+  }
+  .ui {
+    display: block;
+    position: fixed;
+    top: 0;
+    right: 0;
+    -webkit-user-select: none;
+    padding: 1em;
+    background: lightgray;
+  }
 }
 </style>
+<section class="experiment">
+  このサンプルを表示するためには
+  <ol>
+    <li>Chrome のアドレスバーに「chrome://flags」と入力</li>
+  　<li>表示された画面で「Experimental Web Platform features」を探し、「有効」に設定</li>
+  　<li>「今すぐ再起動」をクリック</li>
+  </ol>
+  してください。
+</section>
 <article class="guide">
 <h2>見出し</h2>
 <p>
