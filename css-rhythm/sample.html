@@ -2,12 +2,12 @@
 <style>
 article {
   font-size: 16px;
-  margin: 2em;
 }
 
 @supports (line-height-step: 1px) {
   article {
     --grid: 24px;
+    --guide-color: #00bcd4;
     line-height-step: var(--grid);
   }
   article > p {
@@ -40,6 +40,7 @@ article {
   .image {
     text-align: center;
     line-height: 0;
+    margin: 4px 0;
   }
   .image > img {
     width: 70%;
@@ -54,13 +55,16 @@ article {
     padding: 1em;
     background: lightgray;
   }
-  .grid {
+  .guide {
     background-size: 100% var(--grid);
-    background-image: linear-gradient(to bottom, #00bcd4 1px, transparent 1px);
+    background-image: linear-gradient(to bottom, var(--guide-color) 1px, transparent 1px);
+  }
+  .guide2 {
+    --guide-color: #ffae00;
   }
 }
 </style>
-<article class="grid">
+<article class="guide">
 <h2>見出し</h2>
 <p>
   これは行取りのサンプルです。これは行取りのサンプルです。これは行取りのサンプルです。これは行取りのサンプルです。これは行取りのサンプルです。これは行取りのサンプルです。これは行取りのサンプルです。
@@ -74,17 +78,24 @@ article {
 </p>
 <div class="image rhythm"><img></div>
 <p>
-  画像の後も揃えると、画像と本文の間の空白が一定でなくなります。
+  画像の後も揃えると、画像と本文の間の空白が一定でなく、調整が難しくなります。
 </p>
 <div class="image"><img></div>
+<article class="guide guide2">
 <p>
-  画像と本文の間の空白を一定にする場合、画像の後は、その前とはリズムを揃えず、新しいリズムを始めます。画像と本文の間の空白を一定にする場合、画像の後は、その前とはリズムを揃えず、新しいリズムを始めます。画像と本文の間の空白を一定にする場合、画像の後は、その前とはリズムを揃えず、新しいリズムを始めます。
+  画像と本文の間の空白を一定にする場合、画像の後では、その前とはリズムを揃えず、新しいリズムを始めます。
 </p>
+<p>
+  これは行取りのサンプルです。これは行取りのサンプルです。これは行取りのサンプルです。これは行取りのサンプルです。これは行取りのサンプルです。これは行取りのサンプルです。これは行取りのサンプルです。
+</p>
+</article>
 </article>
 <script>
 function update() {
-  let article = document.getElementsByTagName('article')[0];
-  article.classList.toggle('grid');
+  let articles = document.getElementsByTagName('article');
+  for (let article of articles) {
+    article.classList.toggle('guide');
+  }
 }
 </script>
 <div class="ui">
