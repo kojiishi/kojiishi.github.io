@@ -2,6 +2,8 @@
 <script>
 if (window.CSS && window.CSS.paintWorklet) {
   CSS.paintWorklet.addModule('curly-bracket.js');
+} else if (location.protocol === 'http:') {
+  location.protocol = 'https:';
 }
 </script>
 <style>
