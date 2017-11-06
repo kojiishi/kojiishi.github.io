@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang=ja>
 <style>
 article {
   font-size: 16px;
@@ -79,14 +80,16 @@ large {
   }
 }
 </style>
+<body>
 <section class="experiment">
-  このサンプルを表示するためには
+  <p>このサンプルを表示するためには</p>
   <ol>
     <li>Chrome のアドレスバーに「chrome://flags」と入力</li>
   　<li>表示された画面で「Experimental Web Platform features」を探し、「有効」に設定</li>
   　<li>「今すぐ再起動」をクリック</li>
   </ol>
-  してください。
+  <p>してください。有効にして表示した場合の<a href="sample.png">スクリーンショットはこちら</a>。
+  </p>
 </section>
 <article class="guide">
 <h2>見出し</h2>
@@ -129,3 +132,5 @@ function update() {
   <input id="show-guide" type="checkbox" checked onchange="update()">
   <label for="show-guide">ガイドラインの表示</label>
 </div>
+</body>
+</html>
