@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<body>
+  <h1>Heights of fonts for 100px</h1>
+  <ol id=list></ol>
+</body>
+<script>
+class Measurer {
+  constructor(fontFamily) {
+    this.fontFamily = fontFamily;
+    this.appendElement();
+  }
+
+  appendElement() {
+    let element = document.createElement('div');
+    element.textContent = '0';
+    let style = element.style;
+    style.fontFamily = this.fontFamily + ',Ahem,Times';
+    Measurer.container.appendChild(element);
+    this.element = element;
+  }
+
+  measure() {
+    return this.element.scrollHeight;
+  }
+
+  static get container() {
+    let container = Measurer.container_;
+    if (container)
+      return container;
+    container = document.createElement('div');
+    let style = container.style;
+    style.fontSize = '100px';
+    document.body.appendChild(container);
+    Measurer.container_ = container;
+    return container;
+  }
+
+  static cleanup() {
+    let container = Measurer.container_;
+    if (!container)
+      return;
+    container.parentNode.removeChild(container);
+    Measurer.container_ = null;
+  }
+}
+
+let fontFamilies = [
+  'Times',
+  'Times New Roman',
+  'Arial',
+  'Helvetica',
+  'Roboto',
+  'Segoe',
+  'Segoe UI',
+  'Tahoma',
+  'Verdana',
+  'Courier',
+];
+
+let args = location.search.substring(1).split('&')
+  .map(arg => decodeURIComponent(arg))
+  .filter(arg => arg);
+Array.prototype.push.apply(fontFamilies, args);
+
+let results = fontFamilies
+  .map(fontFamily => new Measurer(fontFamily))
+  .map(measurer => `${measurer.fontFamily} = ${measurer.measure()}`);
+for (let result of results) {
+  let item = document.createElement('li');
+  item.textContent = result;
+  list.appendChild(item);
+}
+
+Measurer.cleanup();
+</script>
