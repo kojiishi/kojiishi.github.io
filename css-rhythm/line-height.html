@@ -1,12 +1,18 @@
 <!DOCTYPE html>
+<style>
+td {
+  text-align: right;
+}
+</style>
 <body>
-  <h1>Heights of fonts for 100px</h1>
-  <ol id=list></ol>
+  <h1>Font Heights</h1>
+  <table id=list></table>
 </body>
 <script>
 class Measurer {
-  constructor(fontFamily) {
+  constructor(fontFamily, fontSize) {
     this.fontFamily = fontFamily;
+    this.fontSize = fontSize || 16;
     this.appendElement();
   }
 
@@ -15,60 +21,81 @@ class Measurer {
     element.textContent = '0';
     let style = element.style;
     style.fontFamily = this.fontFamily + ',Ahem,Times';
+    style.fontSize = this.fontSize + 'px';
     Measurer.container.appendChild(element);
     this.element = element;
   }
 
-  measure() {
-    return this.element.scrollHeight;
+  height() {
+    return this.element.scrollHeight / this.fontSize;
   }
 
   static get container() {
-    let container = Measurer.container_;
+    let container = this.container_;
     if (container)
       return container;
     container = document.createElement('div');
-    let style = container.style;
-    style.fontSize = '100px';
     document.body.appendChild(container);
-    Measurer.container_ = container;
+    this.container_ = container;
     return container;
   }
 
   static cleanup() {
-    let container = Measurer.container_;
+    let container = this.container_;
     if (!container)
       return;
     container.parentNode.removeChild(container);
-    Measurer.container_ = null;
+    this.container_ = null;
   }
 }
 
-let fontFamilies = [
+let families = [
   'Times',
   'Times New Roman',
   'Arial',
   'Helvetica',
   'Roboto',
-  'Segoe',
   'Tahoma',
   'Verdana',
   'Courier',
   'Consolas',
 ];
+let sizes = [10, 16, 32, 100, 1000];
 
 let args = location.search.substring(1).split('&')
   .map(arg => decodeURIComponent(arg))
   .filter(arg => arg);
-Array.prototype.push.apply(fontFamilies, args);
+for (let arg of args) {
+  let kv = arg.split('=', 2);
+  if (kv.length == 1)
+    families.push(arg);
+  else if (kv[0] === 'size')
+    sizes = kv[1].split(',').map(v => parseFloat(v));
+}
 
-let results = fontFamilies
-  .map(fontFamily => new Measurer(fontFamily))
-  .map(measurer => `${measurer.fontFamily} = ${measurer.measure()}`);
+let results = families
+  .map(family => [family, sizes.map(size => new Measurer(family, size))])
+  .map(result => [result[0], result[1].map(measurer => measurer.height())]);
+let row = document.createElement('tr');
+let cell = document.createElement('th');
+row.appendChild(cell);
+for (let size of sizes) {
+  cell = document.createElement('th');
+  cell.textContent = size + 'px';
+  row.appendChild(cell);
+}
+list.appendChild(row);
 for (let result of results) {
-  let item = document.createElement('li');
-  item.textContent = result;
-  list.appendChild(item);
+  let row = document.createElement('tr');
+  let cell = document.createElement('th');
+  cell.textContent = result[0];
+  row.appendChild(cell);
+  for (let height of result[1]) {
+    cell = document.createElement('td');
+    cell.textContent = height;
+    row.appendChild(cell);
+  }
+  list.appendChild(row);
 }
 
 Measurer.cleanup();
