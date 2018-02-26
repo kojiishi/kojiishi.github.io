@@ -4,26 +4,34 @@
 html, body {
   margin: 0;
   padding: 0;
+  overflow: hidden;
 }
 #chart {
   width: 100%;
-  height: 100%;
+  height: 100vh;
 }
 </style>
 <script>
 google.charts.load('current', {'packages':['corechart']});
-google.charts.setOnLoadCallback(drawChart);
+const chart_loader = new Promise((resolve, reject) => {
+  google.charts.setOnLoadCallback(resolve);
+});
+const by_types = fetch('by_types.json')
+  .then(response => response.json());
 
 async function drawChart() {
-  let res = await fetch('by_types.json');
-  let data = await res.json();
+  await chart_loader;
+  let data = await by_types;
   data = google.visualization.arrayToDataTable(data);
 
-  let renderer = new google.visualization.AreaChart(document.getElementById('chart'));
+  let element = document.getElementById('chart');
+  let renderer = new google.visualization.AreaChart(element);
   renderer.draw(data, {
     isStacked: true,
   });
 }
+window.addEventListener('load', drawChart);
+window.addEventListener('resize', drawChart);
 </script>
 <body>
   <div id="chart"></div>
