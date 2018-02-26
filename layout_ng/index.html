@@ -4,10 +4,14 @@
 html, body {
   margin: 0;
   padding: 0;
-  overflow: hidden;
 }
-#chart {
+#by_failure, #by_dir {
   width: 100%;
+}
+#by_failure {
+  height: 50vh;
+}
+#by_dir {
   height: 100vh;
 }
 </style>
@@ -16,23 +20,32 @@ google.charts.load('current', {'packages':['corechart']});
 const chart_loader = new Promise((resolve, reject) => {
   google.charts.setOnLoadCallback(resolve);
 });
-const by_types = fetch('by_types.json')
-  .then(response => response.json());
+const by_failure = loadData('by_failure.json');
+const by_dir = loadData('by_dir.json');
+
+async function loadData(url) {
+  let rs = await fetch(url);
+  let data = await rs.json();
+  await chart_loader;
+  return google.visualization.arrayToDataTable(data);
+}
 
 async function drawChart() {
   await chart_loader;
-  let data = await by_types;
-  data = google.visualization.arrayToDataTable(data);
-
-  let element = document.getElementById('chart');
-  let renderer = new google.visualization.AreaChart(element);
-  renderer.draw(data, {
+  let renderer = new google.visualization.AreaChart(document.getElementById('by_failure'));
+  renderer.draw(await by_failure, {
+    isStacked: true,
+  });
+  renderer = new google.visualization.AreaChart(document.getElementById('by_dir'));
+  renderer.draw(await by_dir, {
     isStacked: true,
   });
 }
+
 window.addEventListener('load', drawChart);
 window.addEventListener('resize', drawChart);
 </script>
 <body>
-  <div id="chart"></div>
+  <div id="by_failure"></div>
+  <div id="by_dir"></div>
 </body>
