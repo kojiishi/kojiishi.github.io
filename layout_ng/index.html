@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+}
+#chart {
+  width: 100%;
+  height: 100%;
+}
+</style>
+<script>
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(drawChart);
+
+async function drawChart() {
+  let res = await fetch('by_types.json');
+  let data = await res.json();
+  data = google.visualization.arrayToDataTable(data);
+
+  let renderer = new google.visualization.AreaChart(document.getElementById('chart'));
+  renderer.draw(data, {
+    isStacked: true,
+  });
+}
+</script>
+<body>
+  <div id="chart"></div>
+</body>
