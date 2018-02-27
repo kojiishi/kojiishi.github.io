@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<title>LayoutNG test failure charts</title>
 <script src="https://www.gstatic.com/charts/loader.js"></script>
 <style>
 html, body {
@@ -30,20 +31,22 @@ async function loadData(url) {
   return google.visualization.arrayToDataTable(data);
 }
 
-async function drawChart() {
-  await chart_loader;
-  let renderer = new google.visualization.AreaChart(document.getElementById('by_failure'));
-  renderer.draw(await by_failure, {
-    isStacked: true,
-  });
-  renderer = new google.visualization.AreaChart(document.getElementById('by_dir'));
-  renderer.draw(await by_dir, {
+function drawChart(id, data) {
+  let element = document.getElementById(id);
+  let renderer = new google.visualization.AreaChart(element);
+  renderer.draw(data, {
     isStacked: true,
   });
 }
 
-window.addEventListener('load', drawChart);
-window.addEventListener('resize', drawChart);
+async function drawCharts() {
+  await chart_loader;
+  drawChart('by_failure', await by_failure);
+  drawChart('by_dir', await by_dir);
+}
+
+window.addEventListener('load', drawCharts);
+window.addEventListener('resize', drawCharts);
 </script>
 <body>
   <div id="by_failure"></div>
