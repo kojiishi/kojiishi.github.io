@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<title>List marker font samples</title>
+<style>
+.sample {
+  display: inline-block;
+  border: solid blue 1px;
+  padding: 5px;
+  margin: 5px;
+  vertical-align: top;
+}
+.sample .heading {
+  text-align: center;
+  font-family: system-ui;
+  line-height: 1.2;
+}
+.sample ul {
+  font-size: 20px;
+}
+</style>
+<body>
+  <template id=template>
+    <div class="sample">
+      <div class="heading"></div>
+      <ul style="list-style-type: circle"><li>&#x25E6;</li></ul>
+      <ul style="list-style-type: circle"><li>&#x25CB;</li></ul>
+      <ul style="list-style-type: circle"><li>&#x26AA;</li></ul>
+      <ul style="list-style-type: circle"><li>&#xFE0E;&#x26AA;</li></ul>
+      <ul style="list-style-type: circle"><li>&#x26AC;</li></ul>
+      <ul style="list-style-type: circle"><li>&#x2B58;</li></ul>
+      <ul style="list-style-type: disc"><li>&#x2022;</li></ul>
+      <ul style="list-style-type: disc"><li>&#x25CF;</li></ul>
+      <ul style="list-style-type: disc"><li>&#x26AB;</li></ul>
+      <ul style="list-style-type: disc"><li>&#x2B24;</li></ul>
+      <ul style="list-style-type: square"><li>&#x25A0;</li></ul>
+      <ul style="list-style-type: square"><li>&#x220E;</li></ul>
+      <ul style="list-style-type: square"><li>&#x25AA;</li></ul>
+      <ul style="list-style-type: square"><li>&#x25FC;</li></ul>
+      <ul style="list-style-type: square"><li>&#x25FE;</li></ul>
+      <ul style="list-style-type: square"><li>&#x2B1B;</li></ul>
+    </div>
+  </template>
+<script>
+function run() {
+  const template = document.getElementById('template').content.firstElementChild;
+  const container = document.body;
+  const fonts = [
+    'Arial',
+    'Calibri',
+    'Consolas',
+    'Courier',
+    'Courier New',
+    'Roboto',
+    'Segoe UI',
+    'Tahoma',
+    'Times',
+    'Verdana',
+    'Webdings',
+    'Windings',
+  ];
+  for (let font of fonts) {
+    const sample = document.importNode(template, true);
+    sample.querySelector('.heading').textContent = font;
+    sample.style.fontFamily = font;
+    container.appendChild(sample);
+  }
+}
+window.addEventListener('load', run);
+</script>
+</body>
