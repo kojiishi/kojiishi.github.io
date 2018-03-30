@@ -4,16 +4,17 @@
 .sample {
   display: inline-block;
   border: solid blue 1px;
-  padding: 5px;
-  margin: 5px;
+  padding: 2px;
+  margin: 2px;
   vertical-align: top;
 }
 .sample .heading {
   text-align: center;
   font-family: system-ui;
+  font-size: 12pt;
   line-height: 1.2;
 }
-.sample ul {
+:root {
   font-size: 20px;
 }
 </style>
@@ -43,26 +44,42 @@
 function run() {
   const template = document.getElementById('template').content.firstElementChild;
   const container = document.body;
-  const fonts = [
-    'Arial',
-    'Calibri',
-    'Consolas',
-    'Courier',
-    'Courier New',
-    'Roboto',
-    'Segoe UI',
-    'Tahoma',
-    'Times',
-    'Verdana',
-    'Webdings',
-    'Windings',
-  ];
+  let fonts = [];
+  let args = location.search;
+  if (args) {
+    args = args.slice(1).split('&');
+    for (let arg of args) {
+      if (arg.startsWith('s='))
+        document.documentElement.style.fontSize = arg.slice(2) + 'px';
+      else
+        fonts.push(arg);
+    }
+  }
+  if (!fonts.length) {
+    fonts = [
+      'Arial',
+      'Calibri',
+      'Consolas',
+      'Courier',
+      'Courier New',
+      'Roboto',
+      'Segoe UI',
+      'Tahoma',
+      'Times',
+      'Verdana',
+      'Webdings',
+      'Windings',
+    ];
+  }
   for (let font of fonts) {
     const sample = document.importNode(template, true);
     sample.querySelector('.heading').textContent = font;
     sample.style.fontFamily = font;
     container.appendChild(sample);
   }
+}
+
+function setSize(size) {
 }
 window.addEventListener('load', run);
 </script>
