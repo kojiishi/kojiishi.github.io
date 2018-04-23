@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+@font-face {
+  font-family: test;
+  src: url(SourceHanSerifCSP-Heavy.otf);
+}
+.vert {
+  writing-mode: vertical-rl;
+}
+.fwid {
+  font-variant-east-asian: full-width;
+}
+#ui {
+  writing-mode: horizontal-tb;
+  position: fixed;
+  left: 0;
+  top: 0;
+  margin: .5em;
+  z-index: 1;
+}
+#container {
+  margin-top: 2em;
+  column-width: 8em;
+  font-family: test;
+  font-size: 20px;
+}
+#list {
+  margin: 0;
+  padding-left: 2em;
+}
+span.ref {
+  font-feature-settings: 'kern' 0, 'cspc' 0, 'vkrn' 0, 'vcsp' 0;
+  color: lightblue;
+  border: lightblue 1px solid;
+}
+span.hwid {
+  font-feature-settings: 'halt' 1;
+}
+span.test {
+  font-feature-settings: 'kern' 1, 'cspc' 1;
+  position: absolute;
+  left: 0;
+  top: 0;
+  border: blue 1px solid;
+}
+.vert span.test {
+  font-feature-settings: 'vkrn' 1, 'vcsp' 1;
+}
+</style>
+<body>
+  <div id=ui>
+    <input id=vert type=checkbox
+      onchange="document.documentElement.classList.toggle('vert')">
+    <label for=vert>Vertical</label>
+    <input id=fwid type=checkbox
+      onchange="document.documentElement.classList.toggle('fwid')">
+    <label for=fwid>Full-width</label>
+  </div>
+  <div id=container>
+    <ol id=list></ol>
+  </div>
+<script>
+const open_list = '‘“（〔［｛〈《「『【｟〘〖«〝';
+const close_list = '’”）〕］｝〉》」』】｠〙〗»〟、。';
+const spaces = '　';
+createCombinations(open_list, open_list, false, true);
+createCombinations(close_list, open_list, false, true);
+createCombinations(close_list, close_list, false, true);
+createCombinations(close_list, spaces, true, false);
+createCombinations(spaces, open_list, false, true);
+runTests();
+
+function createCombinations(list0, list1, half0, half1) {
+  for (let ch0 of list0) {
+    for (let ch1 of list1) {
+      createTest(ch0, ch1, half0, half1);
+    }
+  }
+}
+
+function createTest(ch0, ch1, half0, half1) {
+  let ref = document.createElement('span');
+  ref.classList.add('ref');
+  ref.innerHTML = 'あ' +
+                  (half0 ? '<span class=hwid>' + ch0 + '</span>' : ch0) +
+                  (half1 ? '<span class=hwid>' + ch1 + '</span>' : ch1) +
+                  'あ';
+
+  test = document.createElement('span');
+  test.classList.add('test');
+  test.textContent = 'あ' + ch0 + ch1 + 'あ';
+
+  let item = document.createElement('li');
+  item.style.position = 'relative';
+  item.appendChild(ref);
+  item.appendChild(test);
+  list.appendChild(item);
+}
+
+function runTests() {
+  let elements = document.querySelectorAll('.cspc');
+  let range = document.createRange();
+  for (let i = 0; i < elements.length; i++) {
+    let e = elements[i];
+    range.selectNodeContents(e.firstChild);
+    let bounds = range.getBoundingClientRect();
+    console.log(bounds.width);
+  }
+}
+</script>
+</body>
