@@ -64,11 +64,14 @@ span.test {
 const open_list = '‘“（〔［｛〈《「『【｟〘〖«〝';
 const close_list = '’”）〕］｝〉》」』】｠〙〗»〟、。';
 const spaces = '　';
+const middle_list = '・：；'
 createCombinations(open_list, open_list, false, true);
 createCombinations(close_list, open_list, false, true);
 createCombinations(close_list, close_list, false, true);
 createCombinations(close_list, spaces, true, false);
 createCombinations(spaces, open_list, false, true);
+createCombinations(middle_list, open_list, false, true);
+createCombinations(close_list, middle_list, false, true);
 runTests();
 
 function createCombinations(list0, list1, half0, half1) {
