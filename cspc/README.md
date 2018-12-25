@@ -4,12 +4,12 @@
 
 [Test html]
 
-## Comparisons
+## Comparisons of data
 
-Comparison of [CSS Text 4] and
-[feature file] at [Ken's CJK Type blog]
-at [github](https://github.com/kojiishi/kojiishi.github.io/blob/master/cspc/cspc.ipynb)
-or in [colab](https://colab.research.google.com/github/kojiishi/kojiishi.github.io/blob/master/cspc/cspc.ipynb).
+View at
+[colab](https://colab.research.google.com/github/kojiishi/kojiishi.github.io/blob/master/cspc/cspc.ipynb) or at
+[github](https://github.com/kojiishi/kojiishi.github.io/blob/master/cspc/cspc.ipynb).
+This compares [CSS Text 4] and [feature file] at [Ken's CJK Type blog].
 
 [test html]: test.html
 [CSS Text 4]: https://drafts.csswg.org/css-text-4/#text-spacing-classes
