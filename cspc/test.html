@@ -12,11 +12,15 @@
   font-variant-east-asian: full-width;
 }
 #ui {
+  font-family: Arial, Helvetica, sans-serif;
   writing-mode: horizontal-tb;
   position: fixed; left: 0; top: 0;
   padding: .5em;
   z-index: 1;
   background: rgba(255, 255, 255, .8);
+}
+#ui .note {
+  font-family: 'Times New Roman', Times, serif;
 }
 #container {
   margin-top: 2em;
@@ -65,6 +69,7 @@ li {
     <input id=fwid type=checkbox
       onchange="document.documentElement.classList.toggle('fwid')">
     <label for=fwid>Full-width</label>
+    <span class="note">The <span style="color: lightblue">lightblue text</span> is without the feature.</span>
   </div>
   <div id=container>
   </div>
