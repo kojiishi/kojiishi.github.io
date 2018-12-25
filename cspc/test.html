@@ -13,11 +13,10 @@
 }
 #ui {
   writing-mode: horizontal-tb;
-  position: fixed;
-  left: 0;
-  top: 0;
-  margin: .5em;
+  position: fixed; left: 0; top: 0;
+  padding: .5em;
   z-index: 1;
+  background: rgba(255, 255, 255, .8);
 }
 #container {
   margin-top: 2em;
@@ -25,27 +24,37 @@
   font-family: test;
   font-size: 20px;
 }
-#list {
+h2 {
+  font-size: 1em;
   margin: 0;
-  padding-left: 2em;
 }
-span.ref {
+ol {
+  margin: 0;
+  padding-left: 50px;
+}
+li {
+  position: relative;
+}
+.normal {
   font-feature-settings: 'kern' 0, 'cspc' 0, 'vkrn' 0, 'vcsp' 0;
   color: lightblue;
   border: lightblue 1px solid;
 }
-span.hwid {
-  font-feature-settings: 'halt' 1;
+.ref {
+  font-feature-settings: 'kern' 0, 'cspc' 0, 'vkrn' 0, 'vcsp' 0;
+  position: absolute; left: 0; top: 0;
+  color: pink;
 }
-span.test {
+.test {
   font-feature-settings: 'kern' 1, 'cspc' 1;
-  position: absolute;
-  left: 0;
-  top: 0;
+  position: absolute; left: 0; top: 0;
   border: blue 1px solid;
 }
-.vert span.test {
+.vert .test {
   font-feature-settings: 'vkrn' 1, 'vcsp' 1;
+}
+.hwid {
+  font-feature-settings: 'halt' 1;
 }
 </style>
 <body>
@@ -58,47 +67,76 @@ span.test {
     <label for=fwid>Full-width</label>
   </div>
   <div id=container>
-    <ol id=list></ol>
   </div>
 <script>
-const open_list = '‘“（〔［｛〈《「『【｟〘〖«〝';
-const close_list = '’”）〕］｝〉》」』】｠〙〗»〟、。';
-const spaces = '　';
-const middle_list = '・：；'
-createCombinations(open_list, open_list, false, true);
-createCombinations(close_list, open_list, false, true);
-createCombinations(close_list, close_list, false, true);
-createCombinations(close_list, spaces, true, false);
-createCombinations(spaces, open_list, false, true);
-createCombinations(middle_list, open_list, false, true);
-createCombinations(close_list, middle_list, false, true);
-runTests();
+let open_list = '\u2018\u201C\u3008\u300A\u300C\u300E\u3010\u3014\u3016\u3018\u301A\u301D\uFF08\uFF3B\uFF5B\uFF5F';
+let close_list = '\u2019\u201D\u3009\u300B\u300D\u300F\u3011\u3015\u3017\u3019\u301B\u301E\u301F\uFF09\uFF3D\uFF5D\uFF60';
+let middle_list = '\u00B7\u2027\u30FB'
+let space_list = '\u3000';
+let period_comma_list = '\u3001\u3002\uFF0C\uFF0E';
+let colon_list = '\uFF01\uFF1A\uFF1B\uFF1F';
+// For Japanese:
+close_list += period_comma_list;
+middle_list += colon_list;
 
-function createCombinations(list0, list1, half0, half1) {
+function createTests() {
+  let container = createSection('Open+Open');
+  createCombinations(container, open_list, open_list, false, true);
+  container = createSection('Open+Close');
+  createCombinations(container, close_list, open_list, false, true);
+  container = createSection('Close+Close');
+  createCombinations(container, close_list, close_list, false, true);
+  container = createSection('Space');
+  createCombinations(container, close_list, space_list, true, false);
+  createCombinations(container, space_list, open_list, false, true);
+  container = createSection('Middle');
+  createCombinations(container, middle_list, open_list, false, true);
+  createCombinations(container, close_list, middle_list, false, true);
+}
+
+function createSection(title) {
+  let section = document.createElement('section');
+  let heading = document.createElement('h2');
+  heading.textContent = title;
+  section.appendChild(heading);
+  let list = document.createElement('ol');
+  section.appendChild(list);
+  container.appendChild(section);
+  return list;
+}
+
+function createCombinations(container, list0, list1, half0, half1) {
   for (let ch0 of list0) {
     for (let ch1 of list1) {
-      createTest(ch0, ch1, half0, half1);
+      createTest(container, ch0, ch1, half0, half1);
     }
   }
 }
 
-function createTest(ch0, ch1, half0, half1) {
+function createTest(parent, ch0, ch1, half0, half1) {
+  let item = document.createElement('li');
+
+  let normal = document.createElement('span');
+  normal.classList.add('normal');
+  normal.textContent = 'あ' + ch0 + ch1 + 'あ';
+  item.appendChild(normal);
+
+/*
   let ref = document.createElement('span');
   ref.classList.add('ref');
   ref.innerHTML = 'あ' +
                   (half0 ? '<span class=hwid>' + ch0 + '</span>' : ch0) +
                   (half1 ? '<span class=hwid>' + ch1 + '</span>' : ch1) +
                   'あ';
+  item.appendChild(ref);
+*/
 
-  test = document.createElement('span');
+  let test = document.createElement('span');
   test.classList.add('test');
   test.textContent = 'あ' + ch0 + ch1 + 'あ';
-
-  let item = document.createElement('li');
-  item.style.position = 'relative';
-  item.appendChild(ref);
   item.appendChild(test);
-  list.appendChild(item);
+
+  parent.appendChild(item);
 }
 
 function runTests() {
@@ -111,5 +149,8 @@ function runTests() {
     console.log(bounds.width);
   }
 }
+
+createTests();
+runTests();
 </script>
 </body>
