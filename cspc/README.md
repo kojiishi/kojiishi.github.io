@@ -11,7 +11,7 @@ The [data comparison report]
 of [CSS Text 4] and
 [feature file] at [Adobe CJK Type blog article].
 
-[data comparison report]: https://colab.research.google.com/github/kojiishi/kojiishi.github.io/blob/master/cspc/cspc.ipynb
+[data comparison report]: https://colab.research.google.com/github/kojiishi/contextual-spacing/blob/master/contextual_spacing_analysis.ipynb
 [test html]: https://kojiishi.github.io/cspc/test.html
 [CSS Text 4]: https://drafts.csswg.org/css-text-4/#text-spacing-classes
 [Adobe CJK Type blog article]: https://blogs.adobe.com/CCJKType/2018/04/contextual-spacing.html
