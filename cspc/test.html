@@ -35,16 +35,17 @@
 #container {
   font-feature-settings: 'kern' 0, 'vkrn' 0, 'chws' 0, 'vchw' 0, 'cspc' 0, 'vcsp' 0;
   margin-top: 6em;
-  column-width: 8em;
   font-family: test;
   font-size: 20px;
 }
 h2 {
   font-size: 1em;
   margin: 0;
+  float: left;
 }
 ol {
   margin: 0;
+  margin-left: 7ch;
   padding-left: 50px;
 }
 li {
@@ -123,21 +124,16 @@ class Spacing {
   }
 
   createTests() {
-    let container = this.createSection('Open+Open');
-    this.createCombinations(container, this.open, this.open, false, true);
-    container = this.createSection('Open+Close');
-    this.createCombinations(container, this.close, this.open, false, true);
-    container = this.createSection('Close+Close');
-    this.createCombinations(container, this.close, this.close, false, true);
-    container = this.createSection('Space');
-    this.createCombinations(container, this.close, this.space, true, false);
-    this.createCombinations(container, this.space, this.open, false, true);
-    container = this.createSection('Middle');
-    this.createCombinations(container, this.middle, this.open, false, true);
-    this.createCombinations(container, this.close, this.middle, false, true);
+    this.createSection('Open+Open', [[this.open, this.open, false, true]]);
+    this.createSection('Open+Close', [[this.close, this.open, false, true]]);
+    this.createSection('Close+Close', [[this.close, this.close, false, true]]);
+    this.createSection('Space', [[this.close, this.space, true, false],
+                                 [this.space, this.open, false, true]]);
+    this.createSection('Middle', [[this.middle, this.open, false, true],
+                                  [this.close, this.middle, false, true]]);
   }
 
-  createSection(title) {
+  createSection(title, combinations) {
     let section = document.createElement('section');
     let heading = document.createElement('h2');
     heading.textContent = title;
@@ -145,7 +141,10 @@ class Spacing {
     let list = document.createElement('ol');
     section.appendChild(list);
     this.container.appendChild(section);
-    return list;
+
+    for (let combination of combinations) {
+      this.createCombinations(list, ...combination)
+    }
   }
 
   createCombinations(container, list0, list1, half0, half1) {
