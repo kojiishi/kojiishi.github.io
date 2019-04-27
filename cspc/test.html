@@ -23,6 +23,7 @@
   font-family: 'Times New Roman', Times, serif;
 }
 #container {
+  font-feature-settings: 'kern' 0, 'vkrn' 0, 'chws' 0, 'vchw' 0, 'cspc' 0, 'vcsp' 0;
   margin-top: 2em;
   column-width: 8em;
   font-family: test;
@@ -40,22 +41,20 @@ li {
   position: relative;
 }
 .normal {
-  font-feature-settings: 'kern' 0, 'cspc' 0, 'vkrn' 0, 'vcsp' 0;
   color: lightblue;
   border: lightblue 1px solid;
 }
 .ref {
-  font-feature-settings: 'kern' 0, 'cspc' 0, 'vkrn' 0, 'vcsp' 0;
   position: absolute; left: 0; top: 0;
   color: pink;
 }
 .test {
-  font-feature-settings: 'kern' 1, 'cspc' 1;
+  font-feature-settings: 'chws' 1;
   position: absolute; left: 0; top: 0;
   border: blue 1px solid;
 }
 .vert .test {
-  font-feature-settings: 'vkrn' 1, 'vcsp' 1;
+  font-feature-settings: 'vchw' 1;
 }
 .hwid {
   font-feature-settings: 'halt' 1;
