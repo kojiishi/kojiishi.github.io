@@ -18,14 +18,23 @@
   position: fixed; left: 0; top: 0;
   padding: .5em;
   z-index: 1;
-  background: rgba(255, 255, 255, .8);
+  background: rgba(255, 255, 255, .9);
+  border: gray 2px solid;
+  width: 100%;
+}
+#ui > div > label {
+  display: inline-block;
+  width: 8ch;
+}
+#ui > div > input[type=text] {
+  width: 30em;
 }
 #ui .note {
   font-family: 'Times New Roman', Times, serif;
 }
 #container {
   font-feature-settings: 'kern' 0, 'vkrn' 0, 'chws' 0, 'vchw' 0, 'cspc' 0, 'vcsp' 0;
-  margin-top: 2em;
+  margin-top: 6em;
   column-width: 8em;
   font-family: test;
   font-size: 20px;
@@ -63,6 +72,10 @@ li {
 </style>
 <body>
   <div id=ui>
+    <div><label>Open: </label><input id=open type=text></div>
+    <div><label>Close: </label><input id=close type=text></div>
+    <div><label>Middle: </label><input id=middle type=text></div>
+    <input id=create type=button value="Update Tests">
     <input id=vert type=checkbox
       onchange="document.documentElement.classList.toggle('vert')">
     <label for=vert>Vertical</label>
@@ -71,92 +84,119 @@ li {
     <label for=fwid>Full-width</label>
     <span class="note">The <span style="color: lightblue">lightblue text</span> is without the feature.</span>
   </div>
-  <div id=container>
-  </div>
+  <div id=container></div>
 <script>
-let open_list = '\u2018\u201C\u3008\u300A\u300C\u300E\u3010\u3014\u3016\u3018\u301A\u301D\uFF08\uFF3B\uFF5B\uFF5F';
-let close_list = '\u2019\u201D\u3009\u300B\u300D\u300F\u3011\u3015\u3017\u3019\u301B\u301E\u301F\uFF09\uFF3D\uFF5D\uFF60';
-let middle_list = '\u00B7\u2027\u30FB'
-let space_list = '\u3000';
-let period_comma_list = '\u3001\u3002\uFF0C\uFF0E';
-let colon_list = '\uFF01\uFF1A\uFF1B\uFF1F';
-// For Japanese:
-close_list += period_comma_list;
-middle_list += colon_list;
+class Spacing {
+  constructor() {
+    this.initUI();
+    this.initLists();
+  }
 
-function createTests() {
-  let container = createSection('Open+Open');
-  createCombinations(container, open_list, open_list, false, true);
-  container = createSection('Open+Close');
-  createCombinations(container, close_list, open_list, false, true);
-  container = createSection('Close+Close');
-  createCombinations(container, close_list, close_list, false, true);
-  container = createSection('Space');
-  createCombinations(container, close_list, space_list, true, false);
-  createCombinations(container, space_list, open_list, false, true);
-  container = createSection('Middle');
-  createCombinations(container, middle_list, open_list, false, true);
-  createCombinations(container, close_list, middle_list, false, true);
-}
+  initUI() {
+    this.container = document.getElementById('container');
+    document.getElementById('create').addEventListener('click', () => {
+      this.updateFromUI();
+      this.container.textContent = '';
+      this.createTests();
+    });
+  }
 
-function createSection(title) {
-  let section = document.createElement('section');
-  let heading = document.createElement('h2');
-  heading.textContent = title;
-  section.appendChild(heading);
-  let list = document.createElement('ol');
-  section.appendChild(list);
-  container.appendChild(section);
-  return list;
-}
+  initLists() {
+    this.open = '\u2018\u201C\u3008\u300A\u300C\u300E\u3010\u3014\u3016\u3018\u301A\u301D\uFF08\uFF3B\uFF5B\uFF5F';
+    this.close = '\u2019\u201D\u3009\u300B\u300D\u300F\u3011\u3015\u3017\u3019\u301B\u301E\u301F\uFF09\uFF3D\uFF5D\uFF60';
+    this.middle = '\u00B7\u2027\u30FB'
+    this.space = '\u3000';
+    this.period_comma = '\u3001\u3002\uFF0C\uFF0E';
+    this.colon = '\uFF01\uFF1A\uFF1B\uFF1F';
+    // For Japanese:
+    this.close += this.period_comma;
+    this.middle += this.colon;
+    document.getElementById('open').value = this.open;
+    document.getElementById('close').value = this.close;
+    document.getElementById('middle').value = this.middle;
+  }
 
-function createCombinations(container, list0, list1, half0, half1) {
-  for (let ch0 of list0) {
-    for (let ch1 of list1) {
-      createTest(container, ch0, ch1, half0, half1);
+  updateFromUI() {
+    this.open = document.getElementById('open').value;
+    this.close = document.getElementById('close').value;
+    this.middle = document.getElementById('middle').value;
+  }
+
+  createTests() {
+    let container = this.createSection('Open+Open');
+    this.createCombinations(container, this.open, this.open, false, true);
+    container = this.createSection('Open+Close');
+    this.createCombinations(container, this.close, this.open, false, true);
+    container = this.createSection('Close+Close');
+    this.createCombinations(container, this.close, this.close, false, true);
+    container = this.createSection('Space');
+    this.createCombinations(container, this.close, this.space, true, false);
+    this.createCombinations(container, this.space, this.open, false, true);
+    container = this.createSection('Middle');
+    this.createCombinations(container, this.middle, this.open, false, true);
+    this.createCombinations(container, this.close, this.middle, false, true);
+  }
+
+  createSection(title) {
+    let section = document.createElement('section');
+    let heading = document.createElement('h2');
+    heading.textContent = title;
+    section.appendChild(heading);
+    let list = document.createElement('ol');
+    section.appendChild(list);
+    this.container.appendChild(section);
+    return list;
+  }
+
+  createCombinations(container, list0, list1, half0, half1) {
+    for (let ch0 of list0) {
+      for (let ch1 of list1) {
+        this.createTest(container, ch0, ch1, half0, half1);
+      }
+    }
+  }
+
+  createTest(parent, ch0, ch1, half0, half1) {
+    let item = document.createElement('li');
+
+    let normal = document.createElement('span');
+    normal.classList.add('normal');
+    normal.textContent = 'あ' + ch0 + ch1 + 'あ';
+    item.appendChild(normal);
+
+  /*
+    let ref = document.createElement('span');
+    ref.classList.add('ref');
+    ref.innerHTML = 'あ' +
+                    (half0 ? '<span class=hwid>' + ch0 + '</span>' : ch0) +
+                    (half1 ? '<span class=hwid>' + ch1 + '</span>' : ch1) +
+                    'あ';
+    item.appendChild(ref);
+  */
+
+    let test = document.createElement('span');
+    test.classList.add('test');
+    test.textContent = 'あ' + ch0 + ch1 + 'あ';
+    item.appendChild(test);
+
+    parent.appendChild(item);
+  }
+
+  runTests() {
+    let elements = document.querySelectorAll('.cspc');
+    let range = document.createRange();
+    for (let i = 0; i < elements.length; i++) {
+      let e = elements[i];
+      range.selectNodeContents(e.firstChild);
+      let bounds = range.getBoundingClientRect();
+      console.log(bounds.width);
     }
   }
 }
 
-function createTest(parent, ch0, ch1, half0, half1) {
-  let item = document.createElement('li');
-
-  let normal = document.createElement('span');
-  normal.classList.add('normal');
-  normal.textContent = 'あ' + ch0 + ch1 + 'あ';
-  item.appendChild(normal);
-
-/*
-  let ref = document.createElement('span');
-  ref.classList.add('ref');
-  ref.innerHTML = 'あ' +
-                  (half0 ? '<span class=hwid>' + ch0 + '</span>' : ch0) +
-                  (half1 ? '<span class=hwid>' + ch1 + '</span>' : ch1) +
-                  'あ';
-  item.appendChild(ref);
-*/
-
-  let test = document.createElement('span');
-  test.classList.add('test');
-  test.textContent = 'あ' + ch0 + ch1 + 'あ';
-  item.appendChild(test);
-
-  parent.appendChild(item);
-}
-
-function runTests() {
-  let elements = document.querySelectorAll('.cspc');
-  let range = document.createRange();
-  for (let i = 0; i < elements.length; i++) {
-    let e = elements[i];
-    range.selectNodeContents(e.firstChild);
-    let bounds = range.getBoundingClientRect();
-    console.log(bounds.width);
-  }
-}
-
-createTests();
-runTests();
+let spacing = new Spacing();
+spacing.createTests();
+spacing.runTests();
 </script>
 </body>
 </html>
