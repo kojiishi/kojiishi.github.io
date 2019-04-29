@@ -9,7 +9,10 @@
 .vert {
   writing-mode: vertical-rl;
 }
-.fwid {
+.upright .normal, .upright .test {
+  text-orientation: upright;
+}
+.fwid .normal, .fwid .test {
   font-variant-east-asian: full-width;
 }
 #ui {
@@ -45,8 +48,8 @@ h2 {
 }
 ol {
   margin: 0;
-  margin-left: 7ch;
-  padding-left: 50px;
+  margin-inline-start: 7ch;
+  padding-inline-start: 50px;
 }
 li {
   position: relative;
@@ -80,6 +83,9 @@ li {
     <input id=vert type=checkbox
       onchange="document.documentElement.classList.toggle('vert')">
     <label for=vert>Vertical</label>
+    <input id=upright type=checkbox
+      onchange="document.documentElement.classList.toggle('upright')">
+    <label for=upright>Upright</label>
     <input id=fwid type=checkbox
       onchange="document.documentElement.classList.toggle('fwid')">
     <label for=fwid>Full-width</label>
