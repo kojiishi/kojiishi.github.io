@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja" class="font-out-otf">
+<html>
 <head>
 <meta charset="utf-8">
 <style>
@@ -14,6 +14,10 @@
 @font-face {
   font-family: test-out-ttc;
   src: url(out.ttc);
+}
+@font-face {
+  font-family: test-out-ttf;
+  src: url(out.ttf);
 }
 .vert {
   writing-mode: vertical-rl;
@@ -47,12 +51,12 @@
 #container {
   font-feature-settings: 'chws' 0, 'vchw' 0;
   margin-top: 8em;
-  font-family: test;
   font-size: 20px;
 }
-.font-ken #container li { font-family: test-ken; }
-.font-out-otf #container li { font-family: test-out-otf; }
-.font-out-ttc #container li { font-family: test-out-ttc; }
+.font-ken li { font-family: "test-ken"; }
+.font-out-otf li { font-family: "test-out-otf"; }
+.font-out-ttc li { font-family: "test-out-ttc"; }
+.font-out-ttf li { font-family: "test-out-ttf"; }
 h2 {
   font-size: 1em;
   margin: 0;
@@ -90,9 +94,10 @@ li {
   <div id="ui">
     <label for="font">Font:</label>
     <select id="font">
-      <option value="font-out-otf">out (OTF)</option>
-      <option value="font-out-ttc">out (TTC)</option>
-      <option value="font-ken">Ken</option>
+      <option value="ken">Ken</option>
+      <option value="out-otf">out (OTF)</option>
+      <option value="out-ttf">out (TTF)</option>
+      <option value="out-ttc">out (TTC)</option>
     </select>
     <label for="lang">Language:</label>
     <select id="lang">
@@ -117,25 +122,31 @@ li {
   </div>
   <div id="container"></div>
 <script>
+let classTargetElement = container;
+let classList = classTargetElement.classList;
 font.addEventListener("change", (e) => {
-  let classList = document.documentElement.classList;
   classList.remove("font-ken");
   classList.remove("font-out-otf");
+  classList.remove("font-out-ttf");
   classList.remove("font-out-ttc");
-  classList.add(e.target.value);
+  classList.add("font-" + e.target.value);
 });
 lang.addEventListener("change", (e) => {
-  document.documentElement.lang = e.target.value;
+  classTargetElement.lang = e.target.value;
 });
 vert.addEventListener("change", (e) => {
-  document.documentElement.classList.toggle("vert");
+  classList.toggle("vert");
 });
 upright.addEventListener("change", (e) => {
-  document.documentElement.classList.toggle("upright");
+  classList.toggle("upright");
 });
 fwid.addEventListener("change", (e) => {
-  document.documentElement.classList.toggle("fwid");
+  classList.toggle("fwid");
 });
+let params = (new URL(document.location)).searchParams;
+font.value = params.get("font") ?? "ken";
+classList.add("font-" + font.value);
+classTargetElement.lang = lang.value;
 
 class Spacing {
   constructor() {
@@ -159,9 +170,12 @@ class Spacing {
     this.space = '\u3000';
     this.period_comma = '\u3001\u3002\uFF0C\uFF0E';
     this.colon = '\uFF1B\uFF1A';
+    this.exclam_question = '\uFF01\uFF1F';
     // For Japanese:
     this.close += this.period_comma;
     this.middle += this.colon;
+    // For Chinese
+    this.close += this.exclam_question;
     document.getElementById('open').value = this.open;
     document.getElementById('close').value = this.close;
     document.getElementById('middle').value = this.middle;
@@ -174,13 +188,13 @@ class Spacing {
   }
 
   createTests() {
-    this.createSection('Open+Open', [[this.open, this.open, false, true]]);
-    this.createSection('Open+Close', [[this.close, this.open, false, true]]);
+    this.createSection('Close+Open', [[this.close, this.open, false, true]]);
     this.createSection('Close+Close', [[this.close, this.close, false, true]]);
+    this.createSection('Close+Middle', [[this.close, this.middle, false, true]]);
+    this.createSection('Open+Open', [[this.open, this.open, false, true]]);
+    this.createSection('Middle+Open', [[this.middle, this.open, false, true]]);
     this.createSection('Space', [[this.close, this.space, true, false],
                                  [this.space, this.open, false, true]]);
-    this.createSection('Middle', [[this.middle, this.open, false, true],
-                                  [this.close, this.middle, false, true]]);
   }
 
   createSection(title, combinations) {
