@@ -1,10 +1,19 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" class="font-out-otf">
+<head>
 <meta charset="utf-8">
 <style>
 @font-face {
-  font-family: test;
+  font-family: test-ken;
   src: url(SourceHanSerifCSP-Heavy.otf);
+}
+@font-face {
+  font-family: test-out-otf;
+  src: url(out.otf);
+}
+@font-face {
+  font-family: test-out-ttc;
+  src: url(out.ttc);
 }
 .vert {
   writing-mode: vertical-rl;
@@ -16,14 +25,14 @@
   font-variant-east-asian: full-width;
 }
 #ui {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
   writing-mode: horizontal-tb;
   position: fixed; left: 0; top: 0;
   padding: .5em;
   z-index: 1;
   background: rgba(255, 255, 255, .9);
   border: gray 2px solid;
-  width: 100%;
+  width: fit-content;
 }
 #ui > div > label {
   display: inline-block;
@@ -37,10 +46,13 @@
 }
 #container {
   font-feature-settings: 'chws' 0, 'vchw' 0;
-  margin-top: 6em;
+  margin-top: 8em;
   font-family: test;
   font-size: 20px;
 }
+.font-ken #container li { font-family: test-ken; }
+.font-out-otf #container li { font-family: test-out-otf; }
+.font-out-ttc #container li { font-family: test-out-ttc; }
 h2 {
   font-size: 1em;
   margin: 0;
@@ -48,7 +60,7 @@ h2 {
 }
 ol {
   margin: 0;
-  margin-inline-start: 7ch;
+  margin-inline-start: 10ch;
   padding-inline-start: 50px;
 }
 li {
@@ -74,25 +86,57 @@ li {
   font-feature-settings: 'halt' 1;
 }
 </style>
-<body>
-  <div id=ui>
-    <div><label>Open: </label><input id=open type=text></div>
-    <div><label>Close: </label><input id=close type=text></div>
-    <div><label>Middle: </label><input id=middle type=text></div>
-    <input id=create type=button value="Update Tests">
-    <input id=vert type=checkbox
-      onchange="document.documentElement.classList.toggle('vert')">
-    <label for=vert>Vertical</label>
-    <input id=upright type=checkbox
-      onchange="document.documentElement.classList.toggle('upright')">
-    <label for=upright>Upright</label>
-    <input id=fwid type=checkbox
-      onchange="document.documentElement.classList.toggle('fwid')">
-    <label for=fwid>Full-width</label>
+</head><body>
+  <div id="ui">
+    <label for="font">Font:</label>
+    <select id="font">
+      <option value="font-out-otf">out (OTF)</option>
+      <option value="font-out-ttc">out (TTC)</option>
+      <option value="font-ken">Ken</option>
+    </select>
+    <label for="lang">Language:</label>
+    <select id="lang">
+      <option>ja</option>
+      <option>zh</option>
+      <option>zh-cn</option>
+      <option>zh-tw</option>
+    </select>
+    <input id="fwid" type="checkbox">
+    <label for="fwid">Fullwidth</label>
+    <input id="vert" type="checkbox">
+    <label for="vert">Vertical</label>
+    <input id="upright" type="checkbox">
+    <label for="upright">Upright</label>
+    <br>
+    <div><label>Open: </label><input id="open" type="text"></div>
+    <div><label>Close: </label><input id="close" type="text"></div>
+    <div><label>Middle: </label><input id="middle" type="text"></div>
+    <input id="create" type="button" value="Update Tests">
+    <br>
     <span class="note">The <span style="color: lightblue">lightblue text</span> is without the feature.</span>
   </div>
-  <div id=container></div>
+  <div id="container"></div>
 <script>
+font.addEventListener("change", (e) => {
+  let classList = document.documentElement.classList;
+  classList.remove("font-ken");
+  classList.remove("font-out-otf");
+  classList.remove("font-out-ttc");
+  classList.add(e.target.value);
+});
+lang.addEventListener("change", (e) => {
+  document.documentElement.lang = e.target.value;
+});
+vert.addEventListener("change", (e) => {
+  document.documentElement.classList.toggle("vert");
+});
+upright.addEventListener("change", (e) => {
+  document.documentElement.classList.toggle("upright");
+});
+fwid.addEventListener("change", (e) => {
+  document.documentElement.classList.toggle("fwid");
+});
+
 class Spacing {
   constructor() {
     this.initUI();
@@ -140,8 +184,9 @@ class Spacing {
   }
 
   createSection(title, combinations) {
-    let section = document.createElement('section');
-    let heading = document.createElement('h2');
+    let section = document.createElement('details');
+    section.open = true;
+    let heading = document.createElement('summary');
     heading.textContent = title;
     section.appendChild(heading);
     let list = document.createElement('ol');
@@ -166,7 +211,8 @@ class Spacing {
 
     let normal = document.createElement('span');
     normal.classList.add('normal');
-    normal.textContent = 'あ' + ch0 + ch1 + 'あ';
+    let text = 'あ' + ch0 + ch1 + 'あ';
+    normal.textContent = text;
     item.appendChild(normal);
 
   /*
@@ -181,7 +227,7 @@ class Spacing {
 
     let test = document.createElement('span');
     test.classList.add('test');
-    test.textContent = 'あ' + ch0 + ch1 + 'あ';
+    test.textContent = text;
     item.appendChild(test);
 
     parent.appendChild(item);
