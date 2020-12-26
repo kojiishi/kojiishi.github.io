@@ -8,32 +8,40 @@
   src: url(out.subset.otf);
 }
 @font-face {
-  font-family: full-otf;
+  font-family: otf;
   src: url(out.otf);
 }
 @font-face {
-  font-family: full-ttc;
+  font-family: ttc;
   src: url(out.ttc);
 }
 @font-face {
-  font-family: full-ttf;
+  font-family: ttf;
   src: url(out.ttf);
 }
 @font-face {
   font-family: ken;
   src: url(SourceHanSerifCSP-Heavy.otf);
 }
+.font-subset-otf .test { font-family: "subset-otf"; }
+.font-otf .test { font-family: "otf"; }
+.font-ttc .test { font-family: "ttc"; }
+.font-ttf .test { font-family: "ttf"; }
+.font-ken .test { font-family: "ken"; }
 .vert {
   writing-mode: vertical-rl;
 }
-.upright .normal, .upright .test {
+.upright .test {
   text-orientation: upright;
 }
-.fwid .normal, .fwid .test {
+.fwid .test {
   font-variant-east-asian: full-width;
 }
-#ui {
+:root {
+  --ui-height: 8em;
   font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+}
+#ui {
   writing-mode: horizontal-tb;
   position: fixed; left: 0; top: 0;
   padding: .5em;
@@ -42,11 +50,7 @@
   border: gray 2px solid;
   width: fit-content;
 }
-#ui > div > label {
-  display: inline-block;
-  width: 8ch;
-}
-#ui > div > input[type=text] {
+#ui input[type=text].wide {
   width: 30em;
 }
 #ui .note {
@@ -54,14 +58,9 @@
 }
 #container {
   font-feature-settings: 'chws' 0, 'vchw' 0;
-  margin-top: 8em;
+  margin-top: var(--ui-height);
   font-size: 20px;
 }
-.font-subset-otf li { font-family: "subset-otf"; }
-.font-full-otf li { font-family: "full-otf"; }
-.font-full-ttc li { font-family: "full-ttc"; }
-.font-full-ttf li { font-family: "full-ttf"; }
-.font-ken li { font-family: "ken"; }
 h2 {
   font-size: 1em;
   margin: 0;
@@ -72,10 +71,18 @@ ol {
   margin-inline-start: 10ch;
   padding-inline-start: 50px;
 }
-li {
+.test {
   position: relative;
 }
-.normal {
+.on {
+  font-feature-settings: 'chws' 1;
+  position: absolute; left: 0; top: 0;
+  border: blue 1px solid;
+}
+.vert .on {
+  font-feature-settings: 'vchw' 1;
+}
+.off {
   color: lightblue;
   border: lightblue 1px solid;
 }
@@ -83,48 +90,48 @@ li {
   position: absolute; left: 0; top: 0;
   color: pink;
 }
-.test {
-  font-feature-settings: 'chws' 1;
-  position: absolute; left: 0; top: 0;
-  border: blue 1px solid;
-}
-.vert .test {
-  font-feature-settings: 'vchw' 1;
-}
 .hwid {
   font-feature-settings: 'halt' 1;
 }
 </style>
 </head><body>
   <div id="ui">
-    <label for="font">Font:</label>
-    <select id="font">
-      <option value="subset-otf">Subset (OTF)</option>
-      <option value="full-otf">Full (OTF)</option>
-      <option value="full-ttf">Full (TTF)</option>
-      <option value="full-ttc">Full (TTC)</option>
-      <option value="ken">Ken</option>
-    </select>
-    <label for="lang">Language:</label>
-    <select id="lang">
-      <option>ja</option>
-      <option>zh</option>
-      <option>zh-cn</option>
-      <option>zh-tw</option>
-    </select>
-    <input id="fwid" type="checkbox">
-    <label for="fwid">Fullwidth</label>
-    <input id="vert" type="checkbox">
-    <label for="vert">Vertical</label>
-    <input id="upright" type="checkbox">
-    <label for="upright">Upright</label>
-    <br>
-    <div><label>Open: </label><input id="open" type="text"></div>
-    <div><label>Close: </label><input id="close" type="text"></div>
-    <div><label>Middle: </label><input id="middle" type="text"></div>
-    <input id="create" type="button" value="Update Tests">
-    <br>
-    <span class="note">The <span style="color: lightblue">lightblue text</span> is without the feature.</span>
+    <div>
+      <label for="font">Font:</label>
+      <select id="font">
+        <option value="subset-otf">Subset (OTF)</option>
+        <option value="otf">OTF</option>
+        <option value="ttf">TTF</option>
+        <option value="ttc">TTC</option>
+        <option value="ken">Ken</option>
+      </select>
+      <label for="lang">Language:</label>
+      <select id="lang">
+        <option>ja</option>
+        <option>zh</option>
+        <option>zh-cn</option>
+        <option>zh-tw</option>
+      </select>
+      <input id="fwid" type="checkbox">
+      <label for="fwid">Fullwidth</label>
+      <input id="vert" type="checkbox">
+      <label for="vert">Vertical</label>
+      <input id="upright" type="checkbox">
+      <label for="upright">Upright</label>
+    </div>
+    <table>
+      <tr><td>Open:</td><td><input id="open" type="text" class="wide"></td></tr>
+      <tr><td>Close:</td><td><input id="close" type="text" class="wide"></td></tr>
+      <tr><td>Middle:</td><td><input id="middle" type="text" class="wide"></td></tr>
+      <tr><td>Before/after:</td><td>
+        <input id="context" type="text" value="あ">
+        <input id="create" type="button" value="Update Tests">
+      </td></tr>
+    </table>
+    <div class="note">
+      The <span style="color: lightblue">lightblue text</span>
+      is without the feature.
+    </div>
   </div>
   <div id="container"></div>
 <script>
@@ -135,9 +142,9 @@ function removeClassStartsWith(classList, prefix) {
       classList.remove(name);
   }
 }
-
-let classTargetElement = container;
-let classList = classTargetElement.classList;
+const root = document.documentElement;
+const classTargetElement = root;
+const classList = classTargetElement.classList;
 font.addEventListener("change", (e) => {
   removeClassStartsWith(classList, "font-");
   classList.add("font-" + e.target.value);
@@ -234,13 +241,11 @@ class Spacing {
   }
 
   createTest(parent, ch0, ch1, half0, half1) {
-    let item = document.createElement('li');
-
     let normal = document.createElement('span');
-    normal.classList.add('normal');
-    let text = 'あ' + ch0 + ch1 + 'あ';
+    normal.classList.add('off');
+    let before_after = context.value;
+    let text = before_after + ch0 + ch1 + before_after;
     normal.textContent = text;
-    item.appendChild(normal);
 
   /*
     let ref = document.createElement('span');
@@ -253,10 +258,15 @@ class Spacing {
   */
 
     let test = document.createElement('span');
-    test.classList.add('test');
+    test.classList.add('on');
     test.textContent = text;
-    item.appendChild(test);
 
+    let container = document.createElement('div');
+    container.classList.add('test');
+    container.appendChild(normal);
+    container.appendChild(test);
+    let item = document.createElement('li');
+    item.appendChild(container);
     parent.appendChild(item);
   }
 
@@ -275,6 +285,7 @@ class Spacing {
 let spacing = new Spacing();
 spacing.createTests();
 spacing.runTests();
+root.style.setProperty("--ui-height", ui.offsetHeight + "px");
 </script>
 </body>
 </html>
