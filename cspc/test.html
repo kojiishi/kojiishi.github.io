@@ -4,20 +4,24 @@
 <meta charset="utf-8">
 <style>
 @font-face {
-  font-family: test-ken;
-  src: url(SourceHanSerifCSP-Heavy.otf);
+  font-family: subset-otf;
+  src: url(out.subset.otf);
 }
 @font-face {
-  font-family: test-out-otf;
+  font-family: full-otf;
   src: url(out.otf);
 }
 @font-face {
-  font-family: test-out-ttc;
+  font-family: full-ttc;
   src: url(out.ttc);
 }
 @font-face {
-  font-family: test-out-ttf;
+  font-family: full-ttf;
   src: url(out.ttf);
+}
+@font-face {
+  font-family: ken;
+  src: url(SourceHanSerifCSP-Heavy.otf);
 }
 .vert {
   writing-mode: vertical-rl;
@@ -53,10 +57,11 @@
   margin-top: 8em;
   font-size: 20px;
 }
-.font-ken li { font-family: "test-ken"; }
-.font-out-otf li { font-family: "test-out-otf"; }
-.font-out-ttc li { font-family: "test-out-ttc"; }
-.font-out-ttf li { font-family: "test-out-ttf"; }
+.font-subset-otf li { font-family: "subset-otf"; }
+.font-full-otf li { font-family: "full-otf"; }
+.font-full-ttc li { font-family: "full-ttc"; }
+.font-full-ttf li { font-family: "full-ttf"; }
+.font-ken li { font-family: "ken"; }
 h2 {
   font-size: 1em;
   margin: 0;
@@ -94,10 +99,11 @@ li {
   <div id="ui">
     <label for="font">Font:</label>
     <select id="font">
+      <option value="subset-otf">Subset (OTF)</option>
+      <option value="full-otf">Full (OTF)</option>
+      <option value="full-ttf">Full (TTF)</option>
+      <option value="full-ttc">Full (TTC)</option>
       <option value="ken">Ken</option>
-      <option value="out-otf">out (OTF)</option>
-      <option value="out-ttf">out (TTF)</option>
-      <option value="out-ttc">out (TTC)</option>
     </select>
     <label for="lang">Language:</label>
     <select id="lang">
@@ -122,13 +128,18 @@ li {
   </div>
   <div id="container"></div>
 <script>
+function removeClassStartsWith(classList, prefix) {
+  for (let i = classList.length - 1; i >= 0; --i) {
+    let name = classList[i];
+    if (name.startsWith("font-"))
+      classList.remove(name);
+  }
+}
+
 let classTargetElement = container;
 let classList = classTargetElement.classList;
 font.addEventListener("change", (e) => {
-  classList.remove("font-ken");
-  classList.remove("font-out-otf");
-  classList.remove("font-out-ttf");
-  classList.remove("font-out-ttc");
+  removeClassStartsWith(classList, "font-");
   classList.add("font-" + e.target.value);
 });
 lang.addEventListener("change", (e) => {
@@ -144,7 +155,9 @@ fwid.addEventListener("change", (e) => {
   classList.toggle("fwid");
 });
 let params = (new URL(document.location)).searchParams;
-font.value = params.get("font") ?? "ken";
+font_param = params.get("font")
+if (font_param)
+  font.value = font_param;
 classList.add("font-" + font.value);
 classTargetElement.lang = lang.value;
 
