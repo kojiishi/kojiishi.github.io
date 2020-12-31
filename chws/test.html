@@ -3,31 +3,10 @@
 <head>
 <meta charset="utf-8">
 <style>
-@font-face {
-  font-family: subset-otf;
-  src: url(out.subset.otf);
+:root {
+  --ui-height: 8em;
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
 }
-@font-face {
-  font-family: otf;
-  src: url(out.otf);
-}
-@font-face {
-  font-family: ttc;
-  src: url(out.ttc);
-}
-@font-face {
-  font-family: ttf;
-  src: url(out.ttf);
-}
-@font-face {
-  font-family: ken;
-  src: url(SourceHanSerifCSP-Heavy.otf);
-}
-.font-subset-otf .test { font-family: "subset-otf"; }
-.font-otf .test { font-family: "otf"; }
-.font-ttc .test { font-family: "ttc"; }
-.font-ttf .test { font-family: "ttf"; }
-.font-ken .test { font-family: "ken"; }
 .vert {
   writing-mode: vertical-rl;
 }
@@ -36,10 +15,6 @@
 }
 .fwid .test {
   font-variant-east-asian: full-width;
-}
-:root {
-  --ui-height: 8em;
-  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
 }
 #ui {
   writing-mode: horizontal-tb;
@@ -99,11 +74,6 @@ ol {
     <div>
       <label for="font">Font:</label>
       <select id="font">
-        <option value="subset-otf">Subset (OTF)</option>
-        <option value="otf">OTF</option>
-        <option value="ttf">TTF</option>
-        <option value="ttc">TTC</option>
-        <option value="ken">Ken</option>
       </select>
       <label for="lang">Language:</label>
       <select id="lang">
@@ -135,6 +105,31 @@ ol {
   </div>
   <div id="container"></div>
 <script>
+fonts = {
+  "subset": "out.subset.otf",
+  "out-otf": "out.otf",
+  "out-ttc": "out.ttc",
+  "out-ttf": "out.ttf",
+  "noto-sans": "NotoSansCJK-Regular-chws.ttc",
+  "noto-serif": "NotoSerifCJK-Regular-chws.ttc",
+  "ken": "SourceHanSerifCSP-Heavy.otf",
+};
+function populateFonts() {
+  style = []
+  Object.keys(fonts).forEach((name) => {
+    let url = fonts[name];
+    style.push(`@font-face { font-family: "${name}"; src: url(${url}); }`);
+    style.push(`.font-${name} .test { font-family: "${name}"; }`);
+    option_element = document.createElement("option");
+    option_element.value = name;
+    option_element.textContent = name;
+    font.appendChild(option_element);
+  });
+  style_element = document.createElement("style");
+  style_element.textContent = style.join("\n");
+  document.head.appendChild(style_element);
+}
+populateFonts();
 function removeClassStartsWith(classList, prefix) {
   for (let i = classList.length - 1; i >= 0; --i) {
     let name = classList[i];
