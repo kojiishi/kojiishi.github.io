@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@3.3.1/dist/css/yakuhanjp.min.css">
+<style>
+@font-face {
+  font-family: "chws";
+  src: url(NotoSansCJKjp-Regular-chws.otf);
+}
+@font-face {
+  font-family: "chws-subset";
+  src: url(NotoSansCJKjp-Regular-chws-subset.otf);
+}
+:root {
+  -font-family: "chws-subset";
+  font-size: 16px;
+  --lh: 30px;
+  line-height: var(--lh);
+  max-width: 35em;
+}
+p {
+  margin: 0;
+  -margin-block-start: var(--lh);
+}
+.example {
+  padding: .5em;
+  padding-inline-start: 2em;
+  background: lightgray;
+}
+.example > p {
+  margin: 0;
+}
+.html {
+  font-family: Consolas, 'Courier New', Courier;
+  line-height: 1.2;
+  background: lightgray;
+  padding: .5em;
+  padding-left: 2em;
+  white-space: pre;
+}
+.op { margin-inline-start: -.5em; }
+.cl { margin-inline-end: -.5em; }
+.hwid { font-feature-settings: 'hwid'; }
+.palt { font-feature-settings: 'palt'; }
+.yakuhan {
+  font-family: 'YakuHanJP';
+}
+.noto {
+  font-family: 'Noto Sans JP';
+}
+.noto-chws {
+  font-family: 'chws';
+  font-feature-settings: 'chws';
+}
+.noto-chws-subset {
+  font-family: 'chws-subset';
+  font-feature-settings: 'chws';
+}
+</style>
+<body>
+<h1>約物のベタ組みとツメ組み</h1>
+<p>
+  日本語の印刷・組版において、句読点や括弧などの記号類を「<a
+  href="https://w3c.github.io/jlreq/?lang=ja#term.punctuation-marks">約物</a
+  >」と呼びます。</p>
+<p>
+  約物は、通常は全角一文字分を使って組版されます。<!--
+-->印刷・組版の用語では、これを「ベタ組み」と呼びます。
+</p>
+<p>
+  一方で、「詰め組み」あるいは「ツメ組み」と呼ばれる手法も存在します。<!--
+-->これは主に、ポスター、表紙、見出しなどの大きな文字を使用する場合に、<!--
+-->文字と文字の間がアキすぎて見えるのを防ぐため、<!--
+-->各文字をより近づけて配置する手法です。
+</p>
+<p>
+  見出しなどの大きな文字に限らず、本文すべてを「ツメ組み」する場合もあります。<!--
+-->自動車雑誌や海外雑誌などでは、しばしば見られます。
+</p>
+<p>
+  「ツメ組み」は約物に限らずすべての文字に書ける場合が多いのですが、<!--
+-->ここでは約物に対してのみ、かけてみましょう。
+</p>
+<div class="example">
+  <p>ベタ組み：記号類を「約物」と呼びます。</p>
+  <p>ツメ組み：記号類を<span class="op">「</span>約物<span class="cl">」</span>と呼びます。</p>
+</div>
+<p>
+  Webにおいて、この「役物のツメ組み」をするには、いくつかの方法があります。
+</p>
+<p>
+  まず一番単純な方法は、それぞれをマークアップで修正する方法です。<!--
+-->制作の手間はかかりますが、最も確実で、どのような環境・フォントでも実現できます。
+</p>
+<div class="html">&lt;style&gt;
+.op { margin-left: -5em; }
+.cl { margin-right: -5em; }
+&lt;/style&gt;
+&lt;p>記号類を&lt;span class="op">「&lt;/span
+  >約物&lt;span class="cl">」&lt;/span>と呼びます。&lt;/p></div>
+
+<p>
+  上のサンプルはこの方法で作っています。<!--
+-->自動化すれば使えそうですが、手で一つ一つマークアップするのは大変そうです。
+</p>
+<p>
+  一部のフォントでは、<code><a
+   href="https://docs.microsoft.com/en-us/typography/opentype/spec/features_pt#tag-palt"
+  >palt</a></code> と呼ばれる、ツメ組みのための機能を持っています。<!--
+-->これを使ってみましょう。
+</p>
+<div class="example">
+  <p>ベタ組み：記号類を「約物」と呼びます。</p>
+  <p>ツメ組み：<span class="palt">記号類を「約物」と呼びます。</span></p>
+</div>
+<p>
+  上の二例が同じ表示になっていたとしたら、<!--
+-->お使いのフォントがこの機能に対応していないことになります。<a
+   href="https://fonts.google.com/">Google Fonts</a> の <a
+   href="https://fonts.google.com/specimen/Noto+Sans+JP">Noto Sans JP</a
+  > を使うと、こうなります。
+</p>
+<div class="example noto">
+  <p>ベタ組み：記号類を「約物」と呼びます。</p>
+  <p>ツメ組み：<span class="palt">記号類を「約物」と呼びます。</span></p>
+</div>
+<p>
+  ただし、この手法はフォントによっては動作しなかったり、<!--
+-->約物以外もツメてしまうため期待よりも詰まり過ぎの状態になったり、<a
+   href="https://pando.life/qwintet/article/216#keyword:~:text=%E5%89%8D%E3%81%AE%E3%83%95%E3%82%A9%E3%83%B3%E3%83%88%E3%81%AB%E9%A3%9F%E3%81%84%E8%BE%BC%E3%82%93%E3%81%A7%E3%81%97%E3%81%BE%E3%81%86%E3%81%A8%E3%81%84%E3%81%86%E8%87%B4%E5%91%BD%E7%9A%84%E3%81%AA%E3%83%90%E3%82%B0%E3%81%8C%E3%81%82%E3%82%8A"
+  >フォントによってはバグに遭遇したり</a>、ということがあります。
+</p>
+<p>
+  「約物だけをツメ組みにしたい」を自動でやってくれるフォントもあります。<a
+  href="https://yakuhanjp.qranoko.jp/">Yaku Han JP</a> を使うと、<!--
+-->約物以外はそのままに、約物だけを全部半角にしてくれます。
+</p>
+<div class="example noto">
+  <p>ベタ組み：記号類を「約物」と呼びます。</p>
+  <p>ツメ組み：<span class="yakuhan">記号類を「約物」と呼びます。</span></p>
+</div>
+<h2>連続役物の処理</h2>
+<p>
+  次に、約物が連続して現れた場合を見てみましょう。<a
+  href="https://ascii.jp/elem/000/004/042/4042358/">ASCII.jpの記事</a
+  >から一部引用してみます。
+</p>
+<div class="example">
+  <p>解説記事（「1GBまで0円、2980円で使い放題の楽天モバイルの新プランでわかった7つのこと」）も合わせて</p>
+  <p>月3GBまでの980円から開始）。</p>
+</div>
+<p>
+  これは少しアキ過ぎに見えます。<a
+   href="https://w3c.github.io/jlreq/?lang=ja">日本語組版処理の要件</a
+  >では、連続した場合には、約物の間のアキをツメるように規定していますし、<!--
+-->お手持ちの書籍などでご確認いただければ、<!--
+-->ほぼ全ての印刷物でそのようになっているのをご確認いただけるかと思います。<!--
+-->Microsoft Wordなどで見ても、そうなっているはずです。
+</p>
+<p>
+  これをフォントで実現するのが、<code><a
+   href="https://docs.microsoft.com/en-us/typography/opentype/spec/features_ae#tag-chws"
+  >chws</a></code> という機能です。<!--
+-->やってみましょう。
+</p>
+<div class="example noto-chws">
+  <p>記号類を「約物」と呼びます。</p>
+  <p>解説記事（「1GBまで0円、2980円で使い放題の楽天モバイルの新プランでわかった7つのこと」）も合わせて</p>
+  <p>月3GBまでの980円から開始）。</p>
+</div>
+<p>
+  連続していない場合は全角のままで、<!--
+-->連続している部分だけ半角になっているかと思います。
+</p>
+<p>
+  ただ、これもフォントの機能であるため、<!--
+-->対応しているフォントでしか使えません。<!--
+-->このために、日本語フォントをWebフォントでダウンロードするのも、<!--
+-->ページの表示が重くなって、大変です。<!--
+-->前出のYakuHanJP同様に、約物だけの軽量フォントを使ってみましょう。
+</p>
+<div class="example noto-chws-subset">
+  <p>記号類を「約物」と呼びます。</p>
+  <p>解説記事（「1GBまで0円、2980円で使い放題の楽天モバイルの新プランでわかった7つのこと」）も合わせて</p>
+  <p>月3GBまでの980円から開始）。</p>
+</div>
+<p>
+  約物以外はそのままで、<!--
+-->約物だけをおよそ4KBのWebフォントで表示したのが上の例です。
+</p>
+</body>
+</html>
