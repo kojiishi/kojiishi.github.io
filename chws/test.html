@@ -81,6 +81,8 @@ ol {
         <option>zh</option>
         <option>zh-cn</option>
         <option>zh-tw</option>
+        <option>zh-hk</option>
+        <option>ko</option>
       </select>
       <input id="fwid" type="checkbox">
       <label for="fwid">Fullwidth</label>
@@ -106,11 +108,14 @@ ol {
   <div id="container"></div>
 <script>
 fonts = {
-  "noto-sans-subset": "NotoSansCJKjp-Regular-chws-subset.otf",
-  "noto-sans-otf": "NotoSansCJKjp-Regular-chws.otf",
-  "ttc": "out.ttc",
-  "ttf": "out.ttf",
-  "noto-serif": "NotoSerifCJK-Regular-chws.ttc",
+  "noto-sans-jp-regular-subset": "NotoSansCJKjp-Regular-subset.otf",
+  "noto-sans-jp-regular": "NotoSansCJKjp-Regular.otf",
+  "noto-sans-regular-ttc": "NotoSansCJK-Regular.ttc",
+  "noto-sans-bold-ttc": "NotoSansCJK-Bold.ttc",
+  "noto-sans-light-ttc": "NotoSansCJK-Light.ttc",
+  "noto-serif-regular-ttc": "NotoSerifCJK-Regular.ttc",
+  "noto-serif-bold-ttc": "NotoSerifCJK-Bold.ttc",
+  "noto-serif-light-ttc": "NotoSerifCJK-Light.ttc",
   "ken": "SourceHanSerifCSP-Heavy.otf",
 };
 function populateFonts() {
