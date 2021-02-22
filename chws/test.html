@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <html>
 <head>
 <meta charset="utf-8">
@@ -21,15 +22,26 @@
   position: fixed; left: 0; top: 0;
   padding: .5em;
   z-index: 1;
-  background: rgba(255, 255, 255, .9);
-  border: gray 2px solid;
-  width: fit-content;
+  background: rgba(255, 253, 220, 0.9);
+  width: 100%;
+}
+#ui ul {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+#ui ul li {
+  display: inline;
+  white-space: nowrap;
+  margin-right: 5px;
 }
 #ui input[type=text].wide {
   width: 30em;
+  max-width: 100%;
 }
 #ui .note {
   font-family: 'Times New Roman', Times, serif;
+  margin-inline-start: 3em;
 }
 #container {
   font-feature-settings: 'chws' 0, 'vchw' 0;
@@ -71,26 +83,35 @@ ol {
 </style>
 </head><body>
   <div id="ui">
-    <div>
-      <label for="font">Font:</label>
-      <select id="font">
-      </select>
-      <label for="lang">Language:</label>
-      <select id="lang">
-        <option>ja</option>
-        <option>zh</option>
-        <option>zh-cn</option>
-        <option>zh-tw</option>
-        <option>zh-hk</option>
-        <option>ko</option>
-      </select>
-      <input id="fwid" type="checkbox">
-      <label for="fwid">Fullwidth</label>
-      <input id="vert" type="checkbox">
-      <label for="vert">Vertical</label>
-      <input id="upright" type="checkbox">
-      <label for="upright">Upright</label>
-    </div>
+    <ul>
+      <li>
+        <label for="font">Font:</label>
+        <select id="font"></select>
+      </li>
+      <li>
+        <label for="lang">Language:</label>
+        <select id="lang">
+          <option>ja</option>
+          <option>zh</option>
+          <option>zh-cn</option>
+          <option>zh-tw</option>
+          <option>zh-hk</option>
+          <option>ko</option>
+        </select>
+      </li>
+      <li>
+        <input id="fwid" type="checkbox">
+        <label for="fwid">Fullwidth</label>
+      </li>
+      <li>
+        <input id="vert" type="checkbox">
+        <label for="vert">Vertical</label>
+      </li>
+      <li>
+        <input id="upright" type="checkbox">
+        <label for="upright">Upright</label>
+      </li>
+    </ul>
     <table>
       <tr><td>Open:</td><td><input id="open" type="text" class="wide"></td></tr>
       <tr><td>Close:</td><td><input id="close" type="text" class="wide"></td></tr>
