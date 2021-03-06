@@ -129,7 +129,10 @@ ol {
   <div id="container"></div>
 <script>
 fonts = {
-  "noto-sans-jp-regular-subset": "NotoSansCJKjp-Regular-subset.otf",
+  "sans-serif": "sans-serif",
+  "serif": "serif",
+  "noto-sans-jp-regular-subset-otf": "NotoSansCJKjp-Regular-subset.otf",
+  "noto-sans-jp-regular-subset-woff": "NotoSansCJKjp-Regular-subset.woff",
   "noto-sans-jp-regular": "NotoSansCJKjp-Regular.otf",
   "noto-sans-regular-ttc": "NotoSansCJK-Regular.ttc",
   "noto-sans-bold-ttc": "NotoSansCJK-Bold.ttc",
@@ -144,7 +147,7 @@ function populateFonts() {
   Object.keys(fonts).forEach((name) => {
     let url = fonts[name];
     style.push(`@font-face { font-family: "${name}"; src: url(${url}); }`);
-    style.push(`.font-${name} .test { font-family: "${name}"; }`);
+    style.push(`.font-${name} .test { font-family: ${name}; }`);
     option_element = document.createElement("option");
     option_element.value = name;
     option_element.textContent = name;
