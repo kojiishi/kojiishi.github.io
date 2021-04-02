@@ -49,6 +49,9 @@ p {
 .noto {
   font-family: 'Noto Sans JP';
 }
+.no-chws {
+  font-feature-settings: 'chws' 0;
+}
 .noto-chws {
   font-family: 'chws';
   font-feature-settings: 'chws';
@@ -145,12 +148,12 @@ p {
   href="https://ascii.jp/elem/000/004/042/4042358/">ASCII.jpの記事</a
   >から一部引用してみます。
 </p>
-<div class="example">
+<div class="example no-chws">
   <p>なお、1回10分までの通話定額（月850円）、5G通信（月200円）、速度制限時に最大500kbpsで使い放題になる「パケット放題」（月350円）といったオプションはそのまま継続して用意されている。</p>
   <p>月3GBまでの980円から開始）。</p>
 </div>
 <p>
-  これは少しアキ過ぎに見えます。<a
+  閉じ括弧と句読点の間や、閉じ鉤括弧と開き括弧の間は、少しアキ過ぎに見えます。<a
    href="https://w3c.github.io/jlreq/?lang=ja">日本語組版処理の要件</a
   >では、連続した場合には、約物の間のアキをツメるように規定していますし、<!--
 -->お手持ちの書籍などでご確認いただければ、<!--
