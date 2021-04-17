@@ -3,9 +3,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@3.3.1/dist/css/yakuhanjp.min.css">
+<title>Contextual Spacing Samples</title>
 <style>
 @font-face {
-  font-family: "chws";
+  font-family: 'Noto Sans JP chws';
   src: url(NotoSansCJKjp-Regular-chws.otf);
 }
 @font-face {
@@ -23,7 +24,8 @@
   font-feature-settings: 'chws' 0;
 }
 .chws {
-  font-family: 'chws-subset', 'Noto Sans JP';
+  font-family: 'Noto Sans JP chws';
+  /* font-family: 'chws-subset', 'Noto Sans JP'; */
   font-feature-settings: 'chws';
 }
 .palt {
@@ -37,30 +39,40 @@
 }
 </style>
 <body>
+  <h1>役物の詰め挙動例</h1>
   <ol>
     <li class="none">すべての役物類を全角にする、既定の挙動です。</li>
     <li class="chws">
       連続する役物類を詰めた挙動です。OpenType
       <a href="https://docs.microsoft.com/en-us/typography/opentype/spec/features_ae#tag-chws">chws</a><!--
       -->を使っています。<!--
+      -->本文用に向いています。<!--
+      --><a href="https://www.jisc.go.jp/app/jis/general/GnrJISNumberNameSearchList?toGnrJISStandardDetailList">JIS X4051</a>や<!--
       --><a href="https://w3c.github.io/jlreq/?lang=ja">日本語組版処理の要件</a><!--
-      -->やMicrosoft Wordの本文用の組版です。
+      -->に準拠した、Microsoft Wordd同様の組版です。
     </li>
     <li class="yaku">すべての役物類を半角にする挙動です。<!--
     --><a href="https://yakuhanjp.qranoko.jp/">Yaku Han JP</a><!--
     -->を使っています。
   </li>
-  <li class="palt">すべての役物類を詰めた挙動です。OpenType
+  <li class="palt">すべての文字を詰めた、「ツメ組み」と呼ばれる挙動です。OpenType
       <a href="https://docs.microsoft.com/en-us/typography/opentype/spec/features_pt#tag-palt">palt</a><!--
       -->を使っています。<!--
-      -->見出しなどに向いています。
+      -->タイトルや見出し、箇条書きなどに向いています。
     </li>
   </ol>
+  <hr>
   <ol>
     <li class="none">記号類を「約物」と呼びます。</li>
     <li class="chws">記号類を「約物」と呼びます。</li>
     <li class="yaku">記号類を「約物」と呼びます。</li>
     <li class="palt">記号類を「約物」と呼びます。</li>
+  </ol>
+  <ol>
+    <li class="none">役物が連続する例。』」（実例ではありません）。</li>
+    <li class="chws">役物が連続する例。』」（実例ではありません）。</li>
+    <li class="yaku">役物が連続する例。』」（実例ではありません）。</li>
+    <li class="palt">役物が連続する例。』」（実例ではありません）。</li>
   </ol>
   <ol>
     <li class="none">月3GBまでの980円から開始）。しかも</li>
@@ -80,5 +92,11 @@
     <li class="yaku">なお、1回10分までの通話定額（月850円）、5G通信（月200円）、速度制限時に最大500kbpsで使い放題になる「パケット放題」（月350円）といったオプションはそのまま継続して用意されている。</li>
     <li class="palt">なお、1回10分までの通話定額（月850円）、5G通信（月200円）、速度制限時に最大500kbpsで使い放題になる「パケット放題」（月350円）といったオプションはそのまま継続して用意されている。</li>
     <p></p>
+  </ol>
+  <ol>
+    <li class="none">南アランド週報：『約1年3ヵ月ぶり高値圏へ急伸。来週はCPIがメインイベント』（4/17朝）</li>
+    <li class="chws">南アランド週報：『約1年3ヵ月ぶり高値圏へ急伸。来週はCPIがメインイベント』（4/17朝）</li>
+    <li class="yaku">南アランド週報：『約1年3ヵ月ぶり高値圏へ急伸。来週はCPIがメインイベント』（4/17朝）</li>
+    <li class="palt">南アランド週報：『約1年3ヵ月ぶり高値圏へ急伸。来週はCPIがメインイベント』（4/17朝）</li>
   </ol>
 </body>
