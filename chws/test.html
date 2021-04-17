@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <html>
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contextual Spacing (chws) Test Page</title>
 <style>
 :root {
   --ui-height: 8em;
@@ -124,14 +125,16 @@ ol {
     </table>
     <div class="note">
       The <span style="color: lightblue">lightblue text</span>
-      is without the feature.
+      is without the
+      <a href="https://docs.microsoft.com/en-us/typography/opentype/spec/features_ae#tag-chws">chws</a>
+      feature.
     </div>
   </div>
   <div id="container"></div>
 <script>
 fonts = {
-  "noto-sans-cjk-jp-regular-subset-woff": "NotoSansCJKjp-Regular-subset.woff",
-  "noto-sans-cjk-jp-regular-subset-otf": "NotoSansCJKjp-Regular-subset.otf",
+  "noto-sans-jp-regular-subset-woff": "NotoSansJP-Regular-chws-subset.woff",
+  "noto-sans-cjk-jp-regular-subset-woff": "NotoSansCJKjp-Regular-chws-subset.woff",
   "noto-sans-cjk-jp-regular": "NotoSansCJKjp-Regular.otf",
   "noto-sans-cjk-regular-ttc": "NotoSansCJK-Regular.ttc",
   "noto-sans-cjk-bold-ttc": "NotoSansCJK-Bold.ttc",
@@ -146,7 +149,7 @@ fonts = {
 function populateFonts() {
   style = []
   Object.keys(fonts).forEach((name) => {
-    let url = fonts[name];
+    let url = 'build/' + fonts[name];
     style.push(`@font-face { font-family: "${name}"; src: url(${url}); }`);
     style.push(`.font-${name} .test { font-family: ${name}; }`);
     option_element = document.createElement("option");
