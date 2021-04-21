@@ -1,4 +1,4 @@
-# Contextual Half-width Spacing 'chws'
+# East Asian Contextual Half-width Spacing 'chws'
 
 ## Spec
 
@@ -13,10 +13,11 @@
 
 ## Data Comparisons and Analysis
 
-The [data comparison report]
+* The data comparison report
+([github](https://github.com/kojiishi/kojiishi.github.io/blob/master/chws/contextual_spacing_analysis.ipynb),
+[colab](https://colab.research.google.com/github/kojiishi/kojiishi.github.io/blob/master/chws/contextual_spacing_analysis.ipynb))
 of [CSS Text 4] and [feature file] at [Adobe CJK Type blog article].
 
-[data comparison report]: https://colab.research.google.com/github/kojiishi/kojiishi.github.io/blob/master/chws/contextual_spacing_analysis.ipynb
 [Adobe CJK Type blog article]: https://blogs.adobe.com/CCJKType/2018/04/contextual-spacing.html
 [CSS Text 4]: https://drafts.csswg.org/css-text-4/#text-spacing-classes
 [feature file]: http://blogs.adobe.com/CCJKType/files/2018/04/features.txt
