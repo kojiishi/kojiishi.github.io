@@ -25,6 +25,7 @@
   z-index: 1;
   background: rgba(255, 253, 220, 0.9);
   width: 100%;
+  user-select: none;
 }
 #ui ul {
   display: block;
@@ -102,16 +103,13 @@ ol {
         </select>
       </li>
       <li>
-        <input id="fwid" type="checkbox">
-        <label for="fwid">Fullwidth</label>
+        <label for="fwid"><input id="fwid" type="checkbox">Fullwidth</label>
       </li>
       <li>
-        <input id="vert" type="checkbox">
-        <label for="vert">Vertical</label>
+        <label for="vert"><input id="vert" type="checkbox">Vertical</label>
       </li>
       <li>
-        <input id="upright" type="checkbox">
-        <label for="upright">Upright</label>
+        <label for="upright"><input id="upright" type="checkbox">Upright</label>
       </li>
     </ul>
     <table>
@@ -180,19 +178,27 @@ lang.addEventListener("change", (e) => {
   classTargetElement.lang = e.target.value;
 });
 vert.addEventListener("change", (e) => {
-  classList.toggle("vert");
+  classList.toggle("vert", e.target.checked);
 });
 upright.addEventListener("change", (e) => {
-  classList.toggle("upright");
+  console.log(e.target.checked);
+  if (e.target.checked) {
+    vert.checked = true;
+    classList.toggle("vert", true);
+  }
+  classList.toggle("upright", e.target.checked);
 });
 fwid.addEventListener("change", (e) => {
-  classList.toggle("fwid");
+  classList.toggle("fwid", e.target.checked);
 });
-let params = (new URL(document.location)).searchParams;
-font_param = params.get("font")
+const params = (new URL(document.location)).searchParams;
+const font_param = params.get("font")
 if (font_param)
   font.value = font_param;
 classList.add("font-" + font.value);
+const lang_param = params.get("lang");
+if (lang_param)
+  lang.value = lang_param;
 classTargetElement.lang = lang.value;
 
 class Spacing {
