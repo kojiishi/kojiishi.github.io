@@ -160,6 +160,7 @@ function populateFonts() {
   document.head.appendChild(style_element);
 }
 populateFonts();
+
 function removeClassStartsWith(classList, prefix) {
   for (let i = classList.length - 1; i >= 0; --i) {
     let name = classList[i];
@@ -167,39 +168,55 @@ function removeClassStartsWith(classList, prefix) {
       classList.remove(name);
   }
 }
+
+function replaceSearchParams(name, value) {
+  let url = new URL(document.location);
+  const params = url.searchParams;
+  params.set(name, value);
+  history.replaceState(null, null, url.toString());
+}
+
 const root = document.documentElement;
 const classTargetElement = root;
 const classList = classTargetElement.classList;
 font.addEventListener("change", (e) => {
   removeClassStartsWith(classList, "font-");
-  classList.add("font-" + e.target.value);
+  const font_value = e.target.value;
+  classList.add("font-" + font_value);
+  replaceSearchParams('font', font_value);
 });
 lang.addEventListener("change", (e) => {
-  classTargetElement.lang = e.target.value;
+  const lang_value = e.target.value;
+  classTargetElement.lang = lang_value;
+  replaceSearchParams('lang', lang_value);
 });
 vert.addEventListener("change", (e) => {
   classList.toggle("vert", e.target.checked);
 });
 upright.addEventListener("change", (e) => {
-  console.log(e.target.checked);
-  if (e.target.checked) {
+  const checked = e.target.checked;
+  if (checked) {
     vert.checked = true;
     classList.toggle("vert", true);
   }
-  classList.toggle("upright", e.target.checked);
+  classList.toggle("upright", checked);
 });
 fwid.addEventListener("change", (e) => {
   classList.toggle("fwid", e.target.checked);
 });
-const params = (new URL(document.location)).searchParams;
-const font_param = params.get("font")
-if (font_param)
-  font.value = font_param;
-classList.add("font-" + font.value);
-const lang_param = params.get("lang");
-if (lang_param)
-  lang.value = lang_param;
-classTargetElement.lang = lang.value;
+
+function updateFromSearchParams() {
+  const params = (new URL(document.location)).searchParams;
+  const font_param = params.get("font")
+  if (font_param)
+    font.value = font_param;
+  classList.add("font-" + font.value);
+  const lang_param = params.get("lang");
+  if (lang_param)
+    lang.value = lang_param;
+  classTargetElement.lang = lang.value;
+}
+updateFromSearchParams();
 
 class Spacing {
   constructor() {
