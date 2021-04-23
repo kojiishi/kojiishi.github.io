@@ -169,11 +169,41 @@ function removeClassStartsWith(classList, prefix) {
   }
 }
 
-function replaceSearchParams(name, value) {
-  let url = new URL(document.location);
+function updateUrlSearchParams(name, value) {
+  const url = new URL(document.location);
   const params = url.searchParams;
-  params.set(name, value);
+  if (!value)
+    params.delete(name);
+  else if (typeof value === "boolean")
+    params.set(name, 1);
+  else
+    params.set(name, value);
   history.replaceState(null, null, url.toString());
+}
+
+function updateFromSearchParams(element, params, name) {
+  let value = params.get(name);
+  if (element.type === 'checkbox') {
+    value = value !== null;
+    element.checked = value;
+    return;
+  }
+  if (value)
+    element.value = value;
+}
+
+function updateFromSearchParamsAll() {
+  const params = new URLSearchParams(document.location.search);
+  updateFromSearchParams(font, params, 'font');
+  classList.add('font-' + font.value);
+  updateFromSearchParams(lang, params, 'lang');
+  classTargetElement.lang = lang.value;
+  updateFromSearchParams(fwid, params, 'fwid');
+  classList.toggle('fwid', fwid.checked);
+  updateFromSearchParams(vert, params, 'vert');
+  classList.toggle('vert', vert.checked);
+  updateFromSearchParams(upright, params, 'upright');
+  classList.toggle('upright', upright.checked);
 }
 
 const root = document.documentElement;
@@ -181,42 +211,36 @@ const classTargetElement = root;
 const classList = classTargetElement.classList;
 font.addEventListener("change", (e) => {
   removeClassStartsWith(classList, "font-");
-  const font_value = e.target.value;
-  classList.add("font-" + font_value);
-  replaceSearchParams('font', font_value);
+  const value = e.target.value;
+  classList.add("font-" + value);
+  updateUrlSearchParams('font', value);
 });
 lang.addEventListener("change", (e) => {
-  const lang_value = e.target.value;
-  classTargetElement.lang = lang_value;
-  replaceSearchParams('lang', lang_value);
+  const value = e.target.value;
+  classTargetElement.lang = value;
+  updateUrlSearchParams('lang', value);
 });
 vert.addEventListener("change", (e) => {
-  classList.toggle("vert", e.target.checked);
+  const checked = e.target.checked;
+  classList.toggle("vert", checked);
+  updateUrlSearchParams('vert', checked);
 });
 upright.addEventListener("change", (e) => {
   const checked = e.target.checked;
   if (checked) {
     vert.checked = true;
     classList.toggle("vert", true);
+    updateUrlSearchParams('vert', true);
   }
   classList.toggle("upright", checked);
+  updateUrlSearchParams('upright', checked);
 });
 fwid.addEventListener("change", (e) => {
-  classList.toggle("fwid", e.target.checked);
+  const checked = e.target.checked;
+  classList.toggle("fwid", checked);
+  updateUrlSearchParams('fwid', checked);
 });
-
-function updateFromSearchParams() {
-  const params = (new URL(document.location)).searchParams;
-  const font_param = params.get("font")
-  if (font_param)
-    font.value = font_param;
-  classList.add("font-" + font.value);
-  const lang_param = params.get("lang");
-  if (lang_param)
-    lang.value = lang_param;
-  classTargetElement.lang = lang.value;
-}
-updateFromSearchParams();
+updateFromSearchParamsAll();
 
 class Spacing {
   constructor() {
