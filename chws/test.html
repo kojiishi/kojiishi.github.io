@@ -148,7 +148,8 @@ function populateFonts() {
   style = []
   Object.keys(fonts).forEach((name) => {
     let url = 'build/' + fonts[name];
-    style.push(`@font-face { font-family: "${name}"; src: url(${url}); }`);
+    style.push(`@font-face { font-family: "${name}"; src: url(${url}); ` +
+               `font-display: block; }`);
     style.push(`.font-${name} .test { font-family: ${name}; }`);
     option_element = document.createElement("option");
     option_element.value = name;
