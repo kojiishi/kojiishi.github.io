@@ -24,4 +24,4 @@ of [CSS Text 4] and [feature file] at [Adobe CJK Type blog article].
 
 ## Tools
 
-* [East Asian Contextual Spacing build tools](https://github.com/kojiishi/contextual-spacing)
+* [East Asian Contextual Spacing build tools](https://github.com/kojiishi/east-asian-spacing)
