@@ -28,7 +28,6 @@
   user-select: none;
 }
 #ui ul {
-  display: block;
   margin: 0;
   padding: 0;
 }
@@ -36,6 +35,12 @@
   display: inline;
   white-space: nowrap;
   margin-right: 5px;
+}
+#uivariables {
+  display: none;
+}
+input[type=range] {
+  vertical-align: middle;
 }
 #ui input[type=text].wide {
   width: 30em;
@@ -86,33 +91,43 @@ ol {
 </style>
 </head><body>
   <div id="ui">
-    <ul>
-      <li>
-        <label for="font">Font:</label>
-        <select id="font"></select>
-      </li>
-      <li>
-        <label for="lang">Language:</label>
-        <select id="lang">
-          <option>ja</option>
-          <option>zh</option>
-          <option>zh-cn</option>
-          <option>zh-tw</option>
-          <option>zh-hk</option>
-          <option>ko</option>
-        </select>
-      </li>
-      <li>
-        <label for="fwid"><input id="fwid" type="checkbox">Fullwidth</label>
-      </li>
-      <li>
-        <label for="vert"><input id="vert" type="checkbox">Vertical</label>
-      </li>
-      <li>
-        <label for="upright"><input id="upright" type="checkbox">Upright</label>
-      </li>
-    </ul>
-    <table>
+    <div id="uiformat">
+      <ul>
+        <li>
+          <label for="font">Font:</label>
+          <select id="font"></select>
+        </li>
+        <li>
+          <label for="lang">Language:</label>
+          <select id="lang">
+            <option>ja</option>
+            <option>zh</option>
+            <option>zh-cn</option>
+            <option>zh-tw</option>
+            <option>zh-hk</option>
+            <option>ko</option>
+          </select>
+        </li>
+        <li>
+          <label for="fwid"><input id="fwid" type="checkbox">Fullwidth</label>
+        </li>
+        <li>
+          <label for="vert"><input id="vert" type="checkbox">Vertical</label>
+        </li>
+        <li>
+          <label for="upright"><input id="upright" type="checkbox">Upright</label>
+        </li>
+      </ul>
+    </div>
+    <div id="uivariables">
+      <ul>
+        <li>
+          <label>Weight:</label>
+          <input id="weight" type="range" value="400" min="100" max="900">
+        </li>
+      </ul>
+    </div>
+    <table id="uitext">
       <tr><td>Open:</td><td><input id="open" type="text" class="wide"></td></tr>
       <tr><td>Close:</td><td><input id="close" type="text" class="wide"></td></tr>
       <tr><td>Middle:</td><td><input id="middle" type="text" class="wide"></td></tr>
@@ -140,6 +155,12 @@ fonts = {
   "noto-serif-cjk-regular-ttc": "NotoSerifCJK-Regular.ttc",
   "noto-serif-cjk-bold-ttc": "NotoSerifCJK-Bold.ttc",
   "noto-serif-cjk-light-ttc": "NotoSerifCJK-Light.ttc",
+  "noto-sans-cjk-vf-otf-ttc": "NotoSansCJK-VF.otf.ttc",
+  "noto-sans-cjk-vf-ttf-ttc": "NotoSansCJK-VF.ttf.ttc",
+  "noto-sans-cjk-jp-vf-otf": "NotoSansCJKjp-VF.otf",
+  "noto-sans-cjk-jp-vf-ttf": "NotoSansCJKjp-VF.ttf",
+  "noto-sans-jp-vf-otf": "NotoSansJP-VF.otf",
+  "noto-sans-jp-vf-ttf": "NotoSansJP-VF.ttf",
   "sans-serif": "sans-serif",
   "serif": "serif",
   "ken": "SourceHanSerifCSP-Heavy.otf",
@@ -162,6 +183,10 @@ function populateFonts() {
 }
 populateFonts();
 
+const root = document.documentElement;
+const classTargetElement = root;
+const classList = classTargetElement.classList;
+
 function removeClassStartsWith(classList, prefix) {
   for (let i = classList.length - 1; i >= 0; --i) {
     let name = classList[i];
@@ -182,6 +207,16 @@ function updateUrlSearchParams(name, value) {
   history.replaceState(null, null, url.toString());
 }
 
+function onFontChanged(e) {
+  removeClassStartsWith(classList, "font-");
+  const value = font.value;
+  classList.add("font-" + value);
+  uivariables.style.display = value.includes('-vf-') ? 'block' : 'none';
+  root.style.setProperty("--ui-height", ui.offsetHeight + "px");
+  if (e)
+    updateUrlSearchParams('font', value);
+}
+
 function updateFromSearchParams(element, params, name) {
   let value = params.get(name);
   if (element.type === 'checkbox') {
@@ -196,7 +231,7 @@ function updateFromSearchParams(element, params, name) {
 function updateFromSearchParamsAll() {
   const params = new URLSearchParams(document.location.search);
   updateFromSearchParams(font, params, 'font');
-  classList.add('font-' + font.value);
+  onFontChanged();
   updateFromSearchParams(lang, params, 'lang');
   classTargetElement.lang = lang.value;
   updateFromSearchParams(fwid, params, 'fwid');
@@ -207,15 +242,7 @@ function updateFromSearchParamsAll() {
   classList.toggle('upright', upright.checked);
 }
 
-const root = document.documentElement;
-const classTargetElement = root;
-const classList = classTargetElement.classList;
-font.addEventListener("change", (e) => {
-  removeClassStartsWith(classList, "font-");
-  const value = e.target.value;
-  classList.add("font-" + value);
-  updateUrlSearchParams('font', value);
-});
+font.addEventListener("change", onFontChanged);
 lang.addEventListener("change", (e) => {
   const value = e.target.value;
   classTargetElement.lang = value;
@@ -241,6 +268,20 @@ fwid.addEventListener("change", (e) => {
   classList.toggle("fwid", checked);
   updateUrlSearchParams('fwid', checked);
 });
+
+const styleSheet = document.styleSheets[0];
+let testRule = null;
+for (const rule of styleSheet.cssRules) {
+  if (rule.selectorText === '.test') {
+    testRule = rule;
+    break;
+  }
+}
+weight.addEventListener('input', (e) => {
+  const value = e.target.value;
+  testRule.style.fontVariationSettings = `'wght' ${value}`;
+});
+
 updateFromSearchParamsAll();
 
 class Spacing {
