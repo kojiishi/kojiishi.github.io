@@ -24,6 +24,7 @@ const fonts = [
   "NotoSerifCJK-Regular.ttc",
   "SourceHanSerifCSP-Heavy.otf",
 ];
+const fonts_dir = 'build/';
 </script>
 <style>
 :root {
@@ -194,7 +195,7 @@ ol {
 function populateFonts() {
   const styles = []
   fonts.forEach((filename) => {
-    const url = '../build/' + filename;
+    const url = fonts_dir + filename;
     const name = filename.replace(/[ \.]/g, '-');
     styles.push(`@font-face { font-family: "${name}"; src: url("${url}"); ` +
                 `font-display: block; }`);
