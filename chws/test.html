@@ -25,6 +25,9 @@ const fonts = [
   "SourceHanSerifCSP-Heavy.otf",
 ];
 const fonts_dir = 'build/';
+function isFontKeyVariable(name) {
+  return name.includes('-VF-');
+}
 </script>
 <style>
 :root {
@@ -239,7 +242,7 @@ function onFontChanged(e) {
   removeClassStartsWith(classList, "font-");
   const value = font.value;
   classList.add("font-" + value);
-  uivariables.style.display = value.includes('-VF-') ? 'block' : 'none';
+  uivariables.style.display = isFontKeyVariable(value) ? 'block' : 'none';
   root.style.setProperty("--ui-height", ui.offsetHeight + "px");
   if (e)
     updateUrlSearchParams('font', value);
