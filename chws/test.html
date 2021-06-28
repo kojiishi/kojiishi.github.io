@@ -239,7 +239,7 @@ function onFontChanged(e) {
   removeClassStartsWith(classList, "font-");
   const value = font.value;
   classList.add("font-" + value);
-  uivariables.style.display = value.includes('-vf-') ? 'block' : 'none';
+  uivariables.style.display = value.includes('-VF-') ? 'block' : 'none';
   root.style.setProperty("--ui-height", ui.offsetHeight + "px");
   if (e)
     updateUrlSearchParams('font', value);
