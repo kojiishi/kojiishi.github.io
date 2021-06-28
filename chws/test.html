@@ -4,6 +4,27 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Contextual Spacing (chws) Test Page</title>
+<script>
+const fonts = [
+  "NotoSansCJKjp-Regular-chws-subset.woff",
+  "NotoSansJP-Regular-chws-subset.woff",
+  "NotoSansCJK-Bold.ttc",
+  "NotoSansCJK-Light.ttc",
+  "NotoSansCJK-Regular.ttc",
+  "NotoSansCJK-VF.otf.ttc",
+  "NotoSansCJK-VF.ttf.ttc",
+  "NotoSansCJKjp-Regular.otf",
+  "NotoSansCJKjp-VF.otf",
+  "NotoSansCJKjp-VF.ttf",
+  "NotoSansJP-Regular.otf",
+  "NotoSansJP-VF.otf",
+  "NotoSansJP-VF.ttf",
+  "NotoSerifCJK-Bold.ttc",
+  "NotoSerifCJK-Light.ttc",
+  "NotoSerifCJK-Regular.ttc",
+  "SourceHanSerifCSP-Heavy.otf",
+];
+</script>
 <style>
 :root {
   --ui-height: 8em;
@@ -55,6 +76,9 @@ input[type=range] {
   margin-top: var(--ui-height);
   font-size: 20px;
 }
+summary {
+  cursor: default;
+}
 h2 {
   font-size: 1em;
   margin: 0;
@@ -68,6 +92,9 @@ ol {
 .test {
   line-height: 1.5;
   position: relative;
+}
+.on, .off {
+  display: inline-block;
 }
 .on {
   font-feature-settings: 'chws' 1;
@@ -84,12 +111,18 @@ ol {
 .ref {
   position: absolute; left: 0; top: 0;
   color: pink;
+  display: inline-block;
 }
 .hwid {
   font-feature-settings: 'halt' 1;
 }
+.diffonly .diff-no {
+  visibility: hidden;
+  width: 0; height: 0;
+}
 </style>
-</head><body>
+</head>
+<body>
   <div id="ui">
     <div id="uiformat">
       <ul>
@@ -127,59 +160,52 @@ ol {
         </li>
       </ul>
     </div>
-    <table id="uitext">
-      <tr><td>Open:</td><td><input id="open" type="text" class="wide"></td></tr>
-      <tr><td>Close:</td><td><input id="close" type="text" class="wide"></td></tr>
-      <tr><td>Middle:</td><td><input id="middle" type="text" class="wide"></td></tr>
-      <tr><td>Before/after:</td><td>
-        <input id="context" type="text" value="あ">
-        <input id="create" type="button" value="Update Tests">
-      </td></tr>
-    </table>
-    <div class="note">
+    <div>
+      <ul>
+        <li>
+          <label for="diffonly"><input id="diffonly" type="checkbox">Hide same size</label>
+        </li>
+      </ul>
+    </div>
+    <div class="note" style="float: right">
       The <span style="color: lightblue">lightblue text</span>
       is without the
       <a href="https://docs.microsoft.com/en-us/typography/opentype/spec/features_ae#tag-chws">chws</a>
       feature.
     </div>
+    <details>
+      <summary>
+        Characters
+        <span id="unicode"></span>
+      </summary>
+      <table>
+        <tr><td>Open:</td><td><input id="open" type="text" class="wide"></td></tr>
+        <tr><td>Close:</td><td><input id="close" type="text" class="wide"></td></tr>
+        <tr><td>Middle:</td><td><input id="middle" type="text" class="wide"></td></tr>
+        <tr><td>Before/after:</td><td>
+          <input id="context" type="text" value="あ">
+          <input id="create" type="button" value="Update Tests">
+        </td></tr>
+      </table>
+    </details>
   </div>
   <div id="container"></div>
 <script>
-fonts = {
-  "noto-sans-jp-regular-subset-woff": "NotoSansJP-Regular-chws-subset.woff",
-  "noto-sans-jp-regular-otf": "NotoSansJP-Regular.otf",
-  "noto-sans-cjk-jp-regular-subset-woff": "NotoSansCJKjp-Regular-chws-subset.woff",
-  "noto-sans-cjk-jp-regular": "NotoSansCJKjp-Regular.otf",
-  "noto-sans-cjk-regular-ttc": "NotoSansCJK-Regular.ttc",
-  "noto-sans-cjk-bold-ttc": "NotoSansCJK-Bold.ttc",
-  "noto-sans-cjk-light-ttc": "NotoSansCJK-Light.ttc",
-  "noto-serif-cjk-regular-ttc": "NotoSerifCJK-Regular.ttc",
-  "noto-serif-cjk-bold-ttc": "NotoSerifCJK-Bold.ttc",
-  "noto-serif-cjk-light-ttc": "NotoSerifCJK-Light.ttc",
-  "noto-sans-cjk-vf-otf-ttc": "NotoSansCJK-VF.otf.ttc",
-  "noto-sans-cjk-vf-ttf-ttc": "NotoSansCJK-VF.ttf.ttc",
-  "noto-sans-cjk-jp-vf-otf": "NotoSansCJKjp-VF.otf",
-  "noto-sans-cjk-jp-vf-ttf": "NotoSansCJKjp-VF.ttf",
-  "noto-sans-jp-vf-otf": "NotoSansJP-VF.otf",
-  "noto-sans-jp-vf-ttf": "NotoSansJP-VF.ttf",
-  "sans-serif": "sans-serif",
-  "serif": "serif",
-  "ken": "SourceHanSerifCSP-Heavy.otf",
-};
 function populateFonts() {
-  style = []
-  Object.keys(fonts).forEach((name) => {
-    let url = 'build/' + fonts[name];
-    style.push(`@font-face { font-family: "${name}"; src: url(${url}); ` +
-               `font-display: block; }`);
-    style.push(`.font-${name} .test { font-family: ${name}; }`);
+  const styles = []
+  fonts.forEach((filename) => {
+    const url = '../build/' + filename;
+    const name = filename.replace(/[ \.]/g, '-');
+    styles.push(`@font-face { font-family: "${name}"; src: url("${url}"); ` +
+                `font-display: block; }`);
+    styles.push(`.font-${name} .test { font-family: ${name}; }`);
     option_element = document.createElement("option");
     option_element.value = name;
     option_element.textContent = name;
     font.appendChild(option_element);
   });
   style_element = document.createElement("style");
-  style_element.textContent = style.join("\n");
+  style_element.textContent = styles.join("\n");
   document.head.appendChild(style_element);
 }
 populateFonts();
@@ -191,7 +217,7 @@ const classList = classTargetElement.classList;
 function removeClassStartsWith(classList, prefix) {
   for (let i = classList.length - 1; i >= 0; --i) {
     let name = classList[i];
-    if (name.startsWith("font-"))
+    if (name.startsWith(prefix))
       classList.remove(name);
   }
 }
@@ -216,6 +242,8 @@ function onFontChanged(e) {
   root.style.setProperty("--ui-height", ui.offsetHeight + "px");
   if (e)
     updateUrlSearchParams('font', value);
+  spacing.updateDiff();
+  document.fonts.ready.then((e) => { spacing.updateDiff(); })
 }
 
 function updateFromSearchParams(element, params, name) {
@@ -241,6 +269,9 @@ function updateFromSearchParamsAll() {
   classList.toggle('vert', vert.checked);
   updateFromSearchParams(upright, params, 'upright');
   classList.toggle('upright', upright.checked);
+  updateFromSearchParams(diffonly, params, 'diffonly');
+  classList.toggle('diffonly', diffonly.checked);
+  spacing.updateDiff();
 }
 
 font.addEventListener("change", onFontChanged);
@@ -248,11 +279,13 @@ lang.addEventListener("change", (e) => {
   const value = e.target.value;
   classTargetElement.lang = value;
   updateUrlSearchParams('lang', value);
+  spacing.updateDiff();
 });
 vert.addEventListener("change", (e) => {
   const checked = e.target.checked;
   classList.toggle("vert", checked);
   updateUrlSearchParams('vert', checked);
+  spacing.updateDiff();
 });
 upright.addEventListener("change", (e) => {
   const checked = e.target.checked;
@@ -263,11 +296,19 @@ upright.addEventListener("change", (e) => {
   }
   classList.toggle("upright", checked);
   updateUrlSearchParams('upright', checked);
+  spacing.updateDiff();
 });
 fwid.addEventListener("change", (e) => {
   const checked = e.target.checked;
   classList.toggle("fwid", checked);
   updateUrlSearchParams('fwid', checked);
+  spacing.updateDiff();
+});
+diffonly.addEventListener("change", (e) => {
+  const checked = e.target.checked;
+  classList.toggle("diffonly", checked);
+  updateUrlSearchParams('diffonly', checked);
+  spacing.updateDiff();
 });
 
 const styleSheet = document.styleSheets[0];
@@ -283,7 +324,82 @@ weight.addEventListener('input', (e) => {
   testRule.style.fontVariationSettings = `'wght' ${value}`;
 });
 
-updateFromSearchParamsAll();
+function uhex(ch) {
+  return `U+${ch.toString(16).toUpperCase()}`;
+}
+
+function showUnicode(e) {
+  const element = e.target;
+  let text = element.textContent;
+  const before_after_len = context.value.length;
+  text = text.substring(before_after_len, text.length - before_after_len);
+  unicode_list = Array.from(text)
+    .map(ch => uhex(ch.charCodeAt(0)))
+    .join(' ');
+  unicode.textContent = unicode_list;
+}
+
+class SpacingTestCase {
+  constructor(parent, ch0, ch1) {
+    this.parent = parent;
+    this.ch0 = ch0;
+    this.ch1 = ch1;
+  }
+
+  createElemnt() {
+    const normal = document.createElement('span');
+    normal.classList.add('off');
+    const before_after = context.value;
+    const text = before_after + this.ch0 + this.ch1 + before_after;
+    normal.textContent = text;
+
+    const test = document.createElement('span');
+    test.classList.add('on');
+    test.textContent = text;
+    test.addEventListener('mouseover', showUnicode);
+    test.addEventListener('click', showUnicode);
+
+    const container = document.createElement('div');
+    container.classList.add('test');
+    container.appendChild(normal);
+    container.appendChild(test);
+    const item = document.createElement('li');
+    item.appendChild(container);
+    this.parent.appendChild(item);
+    this.item_element = item;
+    this.on_element = test;
+    this.off_element = normal;
+    item.addEventListener('click', (e) => {
+      this.updateDiff();
+    })
+  }
+
+  updateDiff() {
+    this.clearDiffUI();
+    this.updateDiffData();
+    this.addDiffUI();
+  }
+
+  clearDiffUI() {
+    const element = this.item_element;
+    const classList = element.classList;
+    removeClassStartsWith(classList, 'diff-');
+  }
+
+  updateDiffData() {
+    const on_bounds = this.on_element.getBoundingClientRect();
+    const off_bounds = this.off_element.getBoundingClientRect();
+    this.diff = Math.max(Math.abs(on_bounds.width - off_bounds.width),
+                         Math.abs(on_bounds.height - off_bounds.height));
+  }
+
+  addDiffUI() {
+    const element = this.item_element;
+    const classList = element.classList;
+    const class_name = this.diff >= 1.0 ? 'diff-yes' : 'diff-no';
+    classList.add(class_name);
+  }
+}
 
 class Spacing {
   constructor() {
@@ -325,10 +441,11 @@ class Spacing {
   }
 
   createTests() {
-    this.createSection('Close+Open', [[this.close, this.open, false, true]]);
-    this.createSection('Close+Close', [[this.close, this.close, false, true]]);
-    this.createSection('Close+Middle', [[this.close, this.middle, false, true]]);
+    this.tests = [];
     this.createSection('Open+Open', [[this.open, this.open, false, true]]);
+    this.createSection('Close+Close', [[this.close, this.close, false, true]]);
+    this.createSection('Close+Open', [[this.close, this.open, false, true]]);
+    this.createSection('Close+Middle', [[this.close, this.middle, false, true]]);
     this.createSection('Middle+Open', [[this.middle, this.open, false, true]]);
     this.createSection('Space', [[this.close, this.space, true, false],
                                  [this.space, this.open, false, true]]);
@@ -352,57 +469,29 @@ class Spacing {
   createCombinations(container, list0, list1, half0, half1) {
     for (let ch0 of list0) {
       for (let ch1 of list1) {
-        this.createTest(container, ch0, ch1, half0, half1);
+        const test = new SpacingTestCase(container, ch0, ch1);
+        test.createElemnt();
+        this.tests.push(test);
       }
     }
   }
 
-  createTest(parent, ch0, ch1, half0, half1) {
-    let normal = document.createElement('span');
-    normal.classList.add('off');
-    let before_after = context.value;
-    let text = before_after + ch0 + ch1 + before_after;
-    normal.textContent = text;
-
-  /*
-    let ref = document.createElement('span');
-    ref.classList.add('ref');
-    ref.innerHTML = 'あ' +
-                    (half0 ? '<span class=hwid>' + ch0 + '</span>' : ch0) +
-                    (half1 ? '<span class=hwid>' + ch1 + '</span>' : ch1) +
-                    'あ';
-    item.appendChild(ref);
-  */
-
-    let test = document.createElement('span');
-    test.classList.add('on');
-    test.textContent = text;
-
-    let container = document.createElement('div');
-    container.classList.add('test');
-    container.appendChild(normal);
-    container.appendChild(test);
-    let item = document.createElement('li');
-    item.appendChild(container);
-    parent.appendChild(item);
-  }
-
-  runTests() {
-    let elements = document.querySelectorAll('.cspc');
-    let range = document.createRange();
-    for (let i = 0; i < elements.length; i++) {
-      let e = elements[i];
-      range.selectNodeContents(e.firstChild);
-      let bounds = range.getBoundingClientRect();
-      console.log(bounds.width);
-    }
+  updateDiff() {
+    for (const test of this.tests)
+      test.clearDiffUI();
+    for (const test of this.tests)
+      test.updateDiffData();
+    for (const test of this.tests)
+      test.addDiffUI();
   }
 }
 
 let spacing = new Spacing();
 spacing.createTests();
-spacing.runTests();
 root.style.setProperty("--ui-height", ui.offsetHeight + "px");
+
+updateFromSearchParamsAll();
+document.fonts.ready.then((e) => { spacing.updateDiff(); })
 </script>
 </body>
 </html>
