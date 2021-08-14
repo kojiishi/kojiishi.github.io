@@ -6,24 +6,29 @@
 <title>Contextual Spacing (chws) Test Page</title>
 <script>
 const fonts = [
+  "#Subset",
   "NotoSansCJKjp-Regular-chws-subset.woff",
   "NotoSansJP-Regular-chws-subset.woff",
+  "#NotoCJK",
+  "NotoSansCJK-Regular.ttc",
   "NotoSansCJK-Bold.ttc",
   "NotoSansCJK-Light.ttc",
-  "NotoSansCJK-Regular.ttc",
-  "NotoSansCJK-VF.otf.ttc",
-  "NotoSansCJK-VF.ttf.ttc",
   "NotoSansCJKjp-Regular.otf",
-  "NotoSansCJKjp-VF.otf",
-  "NotoSansCJKjp-VF.ttf",
   "NotoSansJP-Regular.otf",
-  "NotoSansJP-VF.otf",
-  "NotoSansJP-VF.ttf",
+  "NotoSerifCJK-Regular.ttc",
   "NotoSerifCJK-Bold.ttc",
   "NotoSerifCJK-Light.ttc",
-  "NotoSerifCJK-Regular.ttc",
+  "#NotoCJK VF",
+  "NotoSansCJK-VF.otf.ttc",
+  "NotoSansCJK-VF.ttf.ttc",
+  "NotoSansCJKjp-VF.otf",
+  "NotoSansCJKjp-VF.ttf",
+  "NotoSansJP-VF.otf",
+  "NotoSansJP-VF.ttf",
+  "#M+",
   "Mplus1-Regular.otf",
   "Mplus2-Regular.otf",
+  "#Ken",
   "SourceHanSerifCSP-Heavy.otf",
 ];
 const fonts_dir = 'build/';
@@ -202,16 +207,23 @@ ol {
 <script>
 function populateFonts() {
   const styles = []
+  let parent = font
   fonts.forEach((filename) => {
+    if (filename[0] === '#') {
+      parent = document.createElement("optgroup");
+      parent.label = filename.substr(1);
+      font.appendChild(parent);
+      return;
+    }
     const url = fonts_dir + filename;
-    const name = filename.replace(/[ \.]/g, '-');
+    const name = filename.replace(/[ \.#]/g, '-');
     styles.push(`@font-face { font-family: "${name}"; src: url("${url}"); ` +
                 `font-display: block; }`);
     styles.push(`.font-${name} .test { font-family: ${name}; }`);
     option_element = document.createElement("option");
     option_element.value = name;
     option_element.textContent = name;
-    font.appendChild(option_element);
+    parent.appendChild(option_element);
   });
   style_element = document.createElement("style");
   style_element.textContent = styles.join("\n");
