@@ -467,6 +467,9 @@ class Spacing {
     this.middle += this.colon;
     // For Chinese
     this.close += this.exclam_question;
+    // Narrow/halfwidth forms
+    this.open += '\u0028\u005B\uFF62'
+    this.close += '\u0029\u005D\uFF63'
     document.getElementById('open').value = this.open;
     document.getElementById('close').value = this.close;
     document.getElementById('middle').value = this.middle;
