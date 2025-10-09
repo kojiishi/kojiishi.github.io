@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<style>
+emoji {
+  font-family: "Noto Color Emoji", sans-serif;
+}
+th {
+  font-size: 40px;
+  font-family: "Noto Color Emoji", sans-serif;
+}
+label {
+  background-color: lightgray;
+  border: 1px gray;
+  display: inline-block;
+  margin: 4px;
+  padding: 12px;
+  vertical-align: top;
+}
+label:has(input:checked) {
+  background-color: lightgreen;
+}
+label:hover {
+  text-decoration: underline
+}
+</style>
+<template id="ttf">
+  <style>
+@font-face {
+  font-family: 'Noto Color Emoji';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  /* From https://github.com/googlefonts/noto-emoji/tree/main/fonts */
+  src: url(noto-emoji/v2.051/NotoColorEmoji.ttf);
+  /* src: url(https://github.com/googlefonts/noto-emoji/raw/main/fonts/NotoColorEmoji.ttf); */
+}
+  </style>
+</template>
+<template id="ttfr">
+  <style>
+@font-face {
+  font-family: 'Noto Color Emoji';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  /* From https://fonts.google.com/noto/specimen/Noto+Color+Emoji */
+  src: url(noto-emoji/v2.051/NotoColorEmoji-Regular.ttf);
+}
+  </style>
+</template>
+<template id="gf">
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap');
+  </style>
+</template>
+
+<form>
+  <label for="ui-none">
+    <input type="radio" name="src" value="" id="ui-none" onchange="setSrc('')">
+    None
+  </label>
+  <label for="ui-ttf">
+  <input type="radio" name="src" value="ttf" id="ui-ttf" onchange="setSrc('ttf')">
+    TTF (github)
+  </label>
+  <label for="ui-ttfr">
+    <input type="radio" name="src" value="ttfr" id="ui-ttfr" onchange="setSrc('ttfr')">
+    TTF (Google Fonts)
+  </label>
+  <label for="ui-gf">
+    <input type="radio" name="src" value="gf" id="ui-gf" onchange="setSrc('gf')">
+    Google Fonts
+  </label>
+</form>
+
+<script>
+function addTemplate(id) {
+  if (id) {
+    const template = document.getElementById(id);
+    if (template instanceof HTMLTemplateElement) {
+      document.head.appendChild(template.content.cloneNode(true));
+      return id;
+    }
+    console.error('Template element not found or is not a template:', id);
+  }
+  return null;
+}
+
+function updateUI(id) {
+  if (id) {
+    const radio = document.getElementById('ui-' + id);
+    if (radio) {
+      radio.checked = true;
+      return;
+    }
+  }
+  const radio = document.getElementById('ui-none');
+  radio.checked = true;
+}
+
+function setSrc(src) {
+  const url = new URL(window.location.href);
+  if (src) {
+    url.searchParams.set('src', src);
+  } else {
+    url.searchParams.delete('src');
+  }
+  window.location.href = url.toString();
+}
+
+const params = new URLSearchParams(window.location.search);
+updateUI(addTemplate(params.get('src')));
+</script>
+
+<h1 id="u17">Unicode 17</h1>
+<table id="u17t">
+  <tr>
+    <th>
+      <!-- 🧑🏻‍🫯‍🧑🏼 -->
+      &#x1F9D1;&#x1F3FB;&zwj;&#x1FAEF;&zwj;&#x1F9D1;&#x1F3FC;
+    </th>
+    <td>
+      =<emoji>&#x1F9D1;&#x1F3FB;+&#x1FAEF;+&#x1F9D1;&#x1F3FC;</emoji>
+      <br>
+      <a href="https://fonts.google.com/noto/specimen/Noto+Color+Emoji?preview.text=%F0%9F%A7%91%F0%9F%8F%BB%E2%80%8D%F0%9F%AB%AF%E2%80%8D%F0%9F%A7%91%F0%9F%8F%BC">View @ fonts.google.com</a>.
+      See <a href="http://crbug.com/437901589">crbug.com/437901589</a>.
+    </td>
+  </tr>
+</table>
+
+<h1 id="u16">Unicode 16</h1>
+<table id="u16t">
+</table>
+
+<script>
+const u17 = {
+  0x1F6D8: 'landslide',
+  0x1FA8A: 'trombone',
+  0x1FA8E: 'treasure chest',
+  0x1FAC8: 'hairy creature',
+  0x1FACD: 'orca',
+  0x1FAEA: 'distorted face',
+  0x1FAEF: 'fight cloud',
+};
+
+const u16 = {
+  0x1FA89: 'harp',
+  0x1FA8F: 'shovel',
+  0x1FABE: 'leafless tree',
+  0x1FAC6: 'fingerprint',
+  0x1FADC: 'root vegetable',
+  0x1FADF: 'splatter',
+  0x1FAE9: 'face with bags under eyes',
+};
+
+function addCodePoints(codePoints, table) {
+  for (const [codePoint, name] of Object.entries(codePoints)) {
+    const row = table.insertRow();
+    const charCell = document.createElement('th');
+    charCell.innerHTML = `&#x${parseInt(codePoint).toString(16).toUpperCase()};`;
+    row.appendChild(charCell);
+    const nameCell = row.insertCell();
+    nameCell.textContent = name;
+  }
+}
+
+addCodePoints(u17, u17t);
+addCodePoints(u16, u16t);
+</script>
